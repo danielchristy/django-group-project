@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator
 
 class Item(models.Model):
     name = models.CharField(max_length=50)
-    cost = models.DecimalField(decimal_places=2)
+    cost = models.DecimalField(decimal_places=2, max_digits=6)
     tag = models.CharField(max_length=50)
     amount = models.IntegerField()
 
