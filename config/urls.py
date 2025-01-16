@@ -19,7 +19,6 @@ from django.urls import path, include
 from pos_app import views
 
 urlpatterns = [
-    path('home/', views.home_page, name='home_page'),
     path('admin/', admin.site.urls),
     path('', include('pos_app.urls')),
 ]

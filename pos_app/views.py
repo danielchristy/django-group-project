@@ -8,6 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from pos_app.forms import *
 from pos_app.models import *
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 def delete_all_items(request):
@@ -23,16 +24,17 @@ def delete_item_by_id(request, item_id):
         return HttpResponse("Item deleted")
     
 def login_func(request):
-    if request.method=="POST":
-        username=request.POST.get("username")
-        password=request.POST.get("password")
-
-        user=authenticate(request,username=username,password=password)
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request,user)
+            login(request, user)
             return redirect("home_page")
         else:
-            messages.info(request,"username or password is incorrect")
+            messages.info(request, "Username or password is incorrect")
+    
     return render(request, 'login.html')
         
 
@@ -54,6 +56,22 @@ def logout_func(request):
     return redirect('login')
         
 
-def home_page(request):
-    return render(request, 'home.html')
+def show_all_items(request):
+    items = Item.objects.all()
+    return render(request, 'base.html', {'items': items})
+        
+
+
+
+
+
+
+        
+#http://127.0.0.1:8000/admin-dashboard/ to avess the main admmin page currenalt have it as admin but can be changed to the manager or 
+#or owner adming whre they have higher privilages than the employee 
+#if you know of a simpler way byt all means EDIT THIS HOW YOU WANT!!!
+#the main admin user is both a staff and a superuser 
+@staff_member_required(login_url='login')
+def admin_dashboard(request):
+    return render(request, 'admin_dashboard.html')
         

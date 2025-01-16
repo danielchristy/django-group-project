@@ -8,6 +8,9 @@ class Item(models.Model):
     tag = models.CharField(max_length=50)
     amount = models.IntegerField()
 
+    def __str__(self):
+        return f"{self.name} ({self.tag})"
+
 class Promotions(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField()
