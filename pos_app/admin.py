@@ -1,5 +1,5 @@
 from django.contrib import admin
-from pos_app.models import Item, Roles, Promotions, CartItem, Transaction
+from pos_app.models import Item, Role, Promotions, CartItem, Transaction
 
 class ItemAdmin(admin.ModelAdmin):
     list_display = ('name', 'cost', 'department', 'amount', 'barcode')
@@ -7,7 +7,7 @@ class ItemAdmin(admin.ModelAdmin):
     list_filter = ('department',)
 
 admin.site.register(Item, ItemAdmin)
-admin.site.register(Roles)
+admin.site.register(Role)
 admin.site.register(Promotions)
 admin.site.register(CartItem)
 admin.site.register(Transaction)
