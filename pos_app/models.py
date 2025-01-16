@@ -21,13 +21,13 @@ class Promotions(models.Model):
     # added minvaluevalidator to prevent possible negatives
 
 class Role(models.Model):
-    POS_ADMIN = "Admin"
-    MANAGER = "Manager"
-    EMPLOYEE = "Employee"
+    POS_ADMIN = 'Admin'
+    MANAGER = 'Manager'
+    EMPLOYEE = 'Employee'
     ROLE_CHOICES = (
-        POS_ADMIN,
-        MANAGER,
-        EMPLOYEE
+        (POS_ADMIN, 'Admin'),
+        (MANAGER, 'Manager'),
+        (EMPLOYEE, 'Employee'),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
