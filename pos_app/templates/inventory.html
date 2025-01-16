@@ -28,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in items %}
+            {% comment %} {% for item in items %}
                 <tr>
                     <td>{{ item.name }}</td>
                     <td>${{ item.cost }}</td>
@@ -44,7 +44,7 @@
                 <tr>
                     <td colspan="6">No items found</td>
                 </tr>
-            {% endfor %}
+            {% endfor %} {% endcomment %}
         </tbody>
     </table>
 </div>
