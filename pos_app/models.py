@@ -15,3 +15,8 @@ class Promotions(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     discount = models.DecimalField(max_digits=3, decimal_places=2, validators=[MaxValueValidator(1)])
+
+class Roles(models.Model):
+    user = models.ForeignKey(on_delete=models.CASCADE)
+    role = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)

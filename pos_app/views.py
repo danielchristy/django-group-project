@@ -53,6 +53,7 @@ def register_func(request):
 
 def logout_func(request):
     logout(request)
+    messages.success(request, "Logging out.")
     return redirect('login')
         
 
