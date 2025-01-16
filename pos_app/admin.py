@@ -12,11 +12,7 @@ class RoleAdmin(admin.ModelAdmin):
     list_filter = ('role',)
 
 admin.site.register(Item, ItemAdmin)
-<<<<<<< HEAD
-admin.site.register(Role)
-=======
 admin.site.register(Role, RoleAdmin)
->>>>>>> 1a172a042c421772382acfdc1f8b679595a07a5b
 admin.site.register(Promotions)
 admin.site.register(CartItem)
 admin.site.register(Transaction)
