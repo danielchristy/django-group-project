@@ -1,85 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS System</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
 <body>
-    <nav>
-        <!--the adming links wont show up unless the user is a staff member or superuser test with a rugarl user -->
-        {% if user.is_authenticated %}
-            <a href="{% url 'home_page' %}">Home</a>
-            {% if user.is_staff %}
-                <a href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
-                <a href="{% url 'admin:index' %}">Django Admin</a>
-            {% endif %}
-            <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'register' %}">Register</a>
-        {% endif %}
-    </nav>
-
-    <main>
-        <h2>Inventory Items</h2>
-        
-        <div>
-            <input 
-                type="text" 
-                id="searchInput" 
-                placeholder="Search items..."
-                onkeyup="searchTable()"
-            >
+    <header>
+        <div class="container">
+            <h1>POS System</h1>
+            <nav>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'inventory_page' %}">Inventory</a></li>
+                        <li><a href="{% url 'sales' %}">Sales</a></li>
+                        {% if user.is_staff %}
+                            <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+                            <li><a href="{% url 'admin:index' %}">Django Admin</a></li>
+                        {% endif %}
+                        <li><a href="/change_user">Switch User</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'register' %}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
+    </header>
 
-        <table border="1" id="itemTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Stock</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.name }}</td>
-                        <td>${{ item.cost }}</td>
-                        <td>{{ item.tag }}</td>
-                        <td>{{ item.amount }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="4">No items found</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </main>
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
 
-  <!--temporary place for the script i will mobe it soon -->    
-    <script>
-        function searchTable() {
-            let input = document.getElementById("searchInput");
-            let filter = input.value.toLowerCase();
-            let table = document.getElementById("itemTable");
-            let rows = table.getElementsByTagName("tr");
-
-            for (let i = 1; i < rows.length; i++) {
-                let show = false;
-                let cells = rows[i].getElementsByTagName("td");
-                
-                for (let cell of cells) {
-                    let text = cell.textContent || cell.innerText;
-                    if (text.toLowerCase().indexOf(filter) > -1) {
-                        show = true;
-                        break;
-                    }
-                }
-                
-                rows[i].style.display = show ? "" : "none";
-            }
-        }
-    </script>
+    <script src="{% static 'js/search.js' %}"></script>
+    <script src="{% static 'js/sales.js' %}"></script>
 </body>
 </html> 

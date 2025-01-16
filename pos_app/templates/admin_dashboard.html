@@ -6,8 +6,9 @@
 </head>
 <body>
     <nav>
-        <a href="{% url 'home_page' %}">Back to Home</a>
+        <a href="{% url 'sales' %}">Sales</a>
         <a href="{% url 'logout' %}">Logout</a>
+
     </nav>
 
     <h1>Admin Dashboard</h1>
@@ -23,7 +24,7 @@
             <h3>Quick Links</h3>
             <ul>
                 <li><a href="{% url 'admin:index' %}">Django Admin Interface</a></li>
-                <li><a href="{% url 'home_page' %}">View Store</a></li>
+                <li><a href="{% url 'sales' %}">View Store</a></li>
             </ul>
         </div>
     </div>

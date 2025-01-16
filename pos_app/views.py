@@ -31,7 +31,7 @@ def login_func(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("home_page")
+            return redirect("inventory_page")
         else:
             messages.info(request, "Username or password is incorrect")
     
@@ -56,14 +56,18 @@ def logout_func(request):
     messages.success(request, "Logging out.")
     return redirect('login')
         
-
+@login_required(login_url='login')
 def show_all_items(request):
     items = Item.objects.all()
-    return render(request, 'base.html', {'items': items})
+    return render(request, 'inventory.html', {'items': items})
         
 
-
-
+#dded funcitonf the sales daniel made everytihgn apearts to wrok properly in sales
+#the script is in static/js/sales.js
+@login_required(login_url='login') #started adding login requited tosome specif pagess  
+#if they arent logged them wont get error it will just redirect them to the login page
+def sales_func(request):
+    return render(request, 'sales.html')
 
 
 
