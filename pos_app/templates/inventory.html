@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="inventory-container">
+    <h2>Inventory Items</h2>
+    
+    <div class="inventory-controls">
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search items..."
+                onkeyup="searchTable()"
+            >
+        </div>
+        <button class="add-btn" onclick="showAddModal()">Add New Item</button>
+    </div>
+
+    <table border="1" id="itemTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Department</th>
+                <th>Stock</th>
+                <th>Barcode</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>${{ item.cost }}</td>
+                    <td>{{ item.department }}</td>
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.barcode }}</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editItem({{ item.id }})">Edit</button>
+                        <button class="delete-btn" onclick="deleteItem({{ item.id }})">Delete</button>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No items found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!--this is the the winodw wher you can add another item i havent added proper css yet  -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Edit Item</h3>
+        <form id="editForm">
+            <input type="hidden" id="editItemId">
+            <div>
+                <label for="editName">Name:</label>
+                <input type="text" id="editName" required>
+            </div>
+            <div>
+                <label for="editCost">Price:</label>
+                <input type="number" id="editCost" step="0.01" required>
+            </div>
+            <div>
+                <label for="editDepartment">Department:</label>
+                <input type="text" id="editDepartment" required>
+            </div>
+            <div>
+                <label for="editAmount">Stock:</label>
+                <input type="number" id="editAmount" required>
+            </div>
+            <div>
+                <label for="editBarcode">Barcode:</label>
+                <input type="text" id="editBarcode" required>
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddModal()">&times;</span>
+        <h3>Add New Item</h3>
+        <form id="addForm">
+            <div>
+                <label for="addName">Name:</label>
+                <input type="text" id="addName" required>
+            </div>
+            <div>
+                <label for="addCost">Price:</label>
+                <input type="number" id="addCost" step="0.01" required>
+            </div>
+            <div>
+                <label for="addDepartment">Department:</label>
+                <input type="text" id="addDepartment" required>
+            </div>
+            <div>
+                <label for="addAmount">Stock:</label>
+                <input type="number" id="addAmount" required>
+            </div>
+            <div>
+                <label for="addBarcode">Barcode:</label>
+                <input type="text" id="addBarcode" required>
+            </div>
+            <button type="submit">Add Item</button>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}

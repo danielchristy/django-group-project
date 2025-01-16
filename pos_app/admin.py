@@ -1,12 +1,13 @@
 from django.contrib import admin
-from .models import Item, Promotions
-#setup so we can manually edit item in the admin the user is lowercase admin pass is 1234
-@admin.register(Item)
-class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'cost', 'tag', 'amount')
-    search_fields = ('name', 'tag')
+from pos_app.models import Item, Roles, Promotions, CartItem, Transaction
 
-@admin.register(Promotions)
-class PromotionsAdmin(admin.ModelAdmin):
-    list_display = ('item', 'quantity', 'discount')
-    search_fields = ('item__name',)
+class ItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'cost', 'department', 'amount', 'barcode')
+    search_fields = ('name', 'department', 'barcode')
+    list_filter = ('department',)
+
+admin.site.register(Item, ItemAdmin)
+admin.site.register(Roles)
+admin.site.register(Promotions)
+admin.site.register(CartItem)
+admin.site.register(Transaction)
