@@ -8,6 +8,7 @@ class Item(models.Model):
     department = models.CharField(max_length=50)
     amount = models.IntegerField()
     barcode = models.CharField(max_length=50, unique=True)
+    barcode = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return f"{self.name} : ({self.department})"
@@ -21,13 +22,13 @@ class Promotions(models.Model):
     # added minvaluevalidator to prevent possible negatives
 
 class Role(models.Model):
-    POS_ADMIN = "Admin"
-    MANAGER = "Manager"
-    EMPLOYEE = "Employee"
+    POS_ADMIN = 'Admin'
+    MANAGER = 'Manager'
+    EMPLOYEE = 'Employee'
     ROLE_CHOICES = (
-        POS_ADMIN,
-        MANAGER,
-        EMPLOYEE
+        (POS_ADMIN, 'Admin'),
+        (MANAGER, 'Manager'),
+        (EMPLOYEE, 'Employee'),
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

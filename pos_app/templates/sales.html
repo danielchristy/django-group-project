@@ -1,79 +1,83 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="container">
-    <div class="sales-container">
-        <div class="checkout-interface">
-            <div class="search-bar">
-                <label for="barcode">Search by Barcode:</label>
-                <input type="text" id="barcode" placeholder="Enter barcode">
-                <button id="search-btn">Search</button>
-            </div>
+<head>
+    <link rel="stylesheet" href="{% static 'css/sales.css' %}">
+</head>
 
-            <div class="departments">
-                <h3>Grocery</h3>
-                <button class="department-btn" department-id="bakery">Bakery</button>
-                <button class="department-btn" department-id="fruits-vegetables">Fruits &amp; Vegetables</button>
-                <button class="department-btn" department-id="dairy">Dairy</button>
-                <button class="department-btn" department-id="meat-poultry">Meat &amp; Poultry</button>
-            </div>
+<div class="sales-container">
+    <div class="checkout-interface">
+        <div class="search-bar">
+            <label for="barcode">Search by Barcode:</label>
+            <input type="text" id="barcode" placeholder="Enter barcode">
+            <button id="search-btn">Search</button>
+        </div>
 
-            <div class="checkout-list">
-                <h3>Checkout</h3>
-                <table>
-                    <thead>
+        <div class="departments">
+            <h3>Grocery</h3>
+            <button class="department-btn" department-id="bakery">Bakery</button>
+            <button class="department-btn" department-id="fruits-vegetables">Fruits &amp; Vegetables</button>
+            <button class="department-btn" department-id="dairy">Dairy</button>
+            <button class="department-btn" department-id="meat-poultry">Meat &amp; Poultry</button>
+        </div>
+
+        <div class="checkout-list">
+            <h3>Checkout</h3>
+            <table id='checkout-list-table'>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item Description</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        {% comment %} <th>Actions</th> {% endcomment %}
+                    </tr>
+                </thead>
+                <tbody id="checkout-items">
+                    {% for item in checkout_items %}
+                    <tr item-id="{{ item.id }}">
+                        <td>{{ item.name }}</td>
+                        <td>${{ item.cost }}</td>
+                        <td>{{ item.department }}</td>
+                        {% comment %} <td>quantity</td> {% endcomment %}
+                        <td>{{ item.amount }}</td>
+                        {% comment %} <td>item total</td> {% endcomment %}
+                    </tr>
+                    {% empty %}
                         <tr>
-                            <th>#</th>
-                            <th>Item Description</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total</th>
-                            {% comment %} <th>Actions</th> {% endcomment %}
+                            <td colspan="6">No Items Have Been Rang Up</td>
                         </tr>
-                    </thead>
-                    <tbody id="checkout-items">
-                        {% for item in checkout_items %}
-                        <tr item-id="{{ item.id }}">
-                            <td>{{ item.name }}</td>
-                            <td>${{ item.cost }}</td>
-                            <td>{{ item.department }}</td>
-                            {% comment %} <td>quantity</td> {% endcomment %}
-                            <td>{{ item.amount }}</td>
-                            {% comment %} <td>item total</td> {% endcomment %}
-                        </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="6">No Items Have Been Rang Up</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="payment_interface">
+        <div class="transaction-info">
+            <h3>Transaction Info</h3>
+            <div class='transaction-info-item'>
+                <label for="subtotal">Subtotal:</label>
+                <span id="subtotal">$0.00</span>
+            </div>
+            <div class='transaction-info-item'>
+                <label for="tax">Tax (7%):</label>
+                <span id="tax">$0.00</span>
+            </div>
+            <div class='transaction-info-item'>
+                <label for="discount">Discount Total:</label>
+                <span id="discount">$0.00</span>
+            </div>
+            <div class='transaction-info-item'>
+                <label id='grand-total-label' for="grand-total">Grand Total:</label>
+                <span id="grand-total">$0.00</span>
             </div>
         </div>
 
-        <div class="payment_interface">
-            <div class="transaction-info">
-                <h3>Transaction Info</h3>
-                <div>
-                    <label for="subtotal">Subtotal:</label>
-                    <span id="subtotal">${{ checkout_subtotal }}</span>
-                </div>
-                <div>
-                    <label for="tax">Tax (7%):</label>
-                    <span id="tax">$0.00</span>
-                </div>
-                <div>
-                    <label for="discount">Discount Total:</label>
-                    <span id="discount">$0.00</span>
-                </div>
-                <div>
-                    <label for="grand-total">Grand Total:</label>
-                    <span id="grand-total">{{ checkout_total }}</span>
-                </div>
-            </div>
-
-            <div class="payment-options">
-                <h3>Payment Options</h3>
+        <div class="payment-options">
+            <div class='payment-btn-container'>
                 <button id="pay-btn" class="pay-btn">Pay</button>
                 <!-- Per Item Discounts -->
                 <button class="discount-btn" id="discount-single-item">Item Discount</button>
@@ -82,13 +86,15 @@
                 <!-- Other Discounts -->
                 <button class="discount-btn" id="discount-employee">Employee Discount (15%)</button>
                 <button class="discount-btn" id="discount-manager">Manager Comp</button>
-
-            <div class="receipt">
-                <h3>Receipt</h3>
-                <!-- Add receipt generation -->
             </div>
+        </div>
+
+        <div class="receipt">
+            <h3>Receipt</h3>
+            <!-- Add receipt generation -->
         </div>
     </div>
 </div>
+
 
 {% endblock %}

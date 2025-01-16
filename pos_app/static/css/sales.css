@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sales-container {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    gap: 80px;
+    padding: 25px;
+    background-color: beige;
+}
+
+/* interfaces */
+.checkout-interface, .payment_interface {
+    width: 45%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.checkout-interface {
+    background-color: antiquewhite;
+    border: 2px solid black;
+}
+
+.payment-interface {
+    background-color: orange;
+    border: 2px solid black;
+}
+
+
+.transaction-info {
+    background-color: black;
+    color: yellow;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.transaction-info h3 {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 24px;
+}
+
+.transaction-info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+#grand-total-label{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#grand-total {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* tables */
+.checkout-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+
+/* buttons */
+button {
+    margin: 5px 0;
+    padding: 10px;
+    background-color: burlywood;
+    color: whitesmoke;
+    border: 1px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.payment-btn-container {
+    display: flex;
+    flex-direction: column;
+    /* width: 100%;  */
+}
+
+#pay-btn {
+    background-color: green;
+    color: whitesmoke;
+    font-size: 28px;
+    width: 100%;
+    padding: 10px;
+}
+
+.discount-btn {
+    background-color: dimgray;
+    color: whitesmoke;
+}
+
+
+
+.checkout-list-table button {
+    display: inline-block;
+    width: auto;
+}
+
+
+
+
+
+
+
+
