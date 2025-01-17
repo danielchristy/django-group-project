@@ -4,14 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS System</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <meta name='description', content='Point of Sale App'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <header>
-        <div class="container">
+        <div class="nav-bar">
             <h1>POS System</h1>
-            <nav>
+            <nav class='nav-links'>
                 <ul>
                     {% if user.is_authenticated %}
                         <li><a href="{% url 'inventory_page' %}">Inventory</a></li>
@@ -20,7 +24,7 @@
                             <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
                             <li><a href="{% url 'admin:index' %}">Django Admin</a></li>
                         {% endif %}
-                        <li><a href="/change_user">Switch User</a></li>
+                        <li><a href="switch_user">Switch User</a></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
                         <li><a href="{% url 'login' %}">Login</a></li>

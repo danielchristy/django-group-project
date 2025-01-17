@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% block extra_css %}{% load static %}{% endblock %}
 
 {% block content %}
+<head>
+    <link rel='stylesheet' href='{% static 'css/inventory.css' %}'>
+</head>
+
 <div class="inventory-container">
     <h2>Inventory Items</h2>
     
