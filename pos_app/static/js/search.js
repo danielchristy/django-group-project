@@ -132,6 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', searchTable);
+    }
 });
 
 

@@ -3,12 +3,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from pos_app.forms import *
 from pos_app.models import *
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.http import require_http_methods
 
 
 def delete_all_items(request):
@@ -79,4 +80,16 @@ def sales_func(request):
 @staff_member_required(login_url='login')
 def admin_dashboard(request):
     return render(request, 'admin_dashboard.html')
+        
+
+@require_http_methods(["DELETE", "GET", "PUT"])
+def item_detail(request, item_id):
+    try:
+        item = Item.objects.get(id=item_id)
+        if request.method == "DELETE":
+            item.delete()
+            return JsonResponse({"message": "Item deleted successfully"})
+        # ... other methods will be added later ...
+    except Item.DoesNotExist:
+        return JsonResponse({"error": "Item not found"}, status=404)
         

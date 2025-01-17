@@ -12,4 +12,5 @@ urlpatterns = [
     
     
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('api/item/<int:item_id>/', views.item_detail, name='item_detail'),
 ] 
