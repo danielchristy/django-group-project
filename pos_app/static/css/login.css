@@ -1,52 +1,19 @@
 /* login styling */
-
-.loginform {
-    padding: 3rem;
-}
-
-    .loginform > div {
-        margin: .5rem;
-        padding: .5rem;
-    }
-
-    .loginform > div > input {
-        padding: .25rem;
-        border-radius: 8px;
-        outline: none;
-        border: none;
-        transition-duration: 150ms;
-    }
-
-    .loginform > div > input:focus {
-        transform: scale(1.1);
-    }
-
 .login-container {
-    padding: 20px;
+    padding: 25px;
     margin: 0 auto;
-    height: 100%;
-    width: 90%; 
-    padding: 25px; 
+    height: 45%;
+    width: 50%;
     background-color: #95a5a6;
     border-radius: 5px;
     border: 1px solid #ddd;
 }
 
-.login-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
+.loginform {
+    padding: 3rem;
 }
 
 .login-info-container {
     display: flex;
     justify-content: center;
-    
-    
-}
-
-.btn {
-    padding: .5rem;
-    border-radius: 5px;
-    outline:none; 
-    border: none;
 }

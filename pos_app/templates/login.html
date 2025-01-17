@@ -1,89 +1,36 @@
-{% extends "base.html" %}
-{% block extra_css %}{% load static %}{% endblock %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+<script src='{% static 'js/base.js' %}'></script>
 
 {% block content %}
-<head>
-    <link rel='stylesheet' href='{% static 'css/login.css' %}'>
-</head>
+    {% if not user.is_authenticated %}
+        <!-- screensaver should only show if no user logged in or session expires -->
+        <div class='screensaver'>
+            <div class='floating-circle circle-1'></div>
+            <div class='floating-circle circle-2'></div>
+            <div class='floating-circle circle-3'></div>
+            <div class='floating-circle circle-4'></div>
 
-<div class='login-container'>
-    <h2>Login</h2>
+            <div class='login-container'>
+                <h1 class='login-title'>Nimbus POS</h1>
+                <button id='theme-toggle' aria-label='Toggle Theme'>🌙</button>
+                <p class='nimbus-quote'>Where Every Sale Is A Breeze</p>
+                <form class='login-form' method='POST'>
+                    {% csrf_token %}
+                    {{ form.as_p }} 
+                    <input type='text' name='username' placeholder='Username' required>
+                    <input type='password' name='password' placeholder='Password' required>
+                    <button type='submit'>Login</button>
+                </form>
 
-    <div class='login-info-container'>
-        <form method="POST" class="loginform">
-            {% csrf_token %}
-            <div>
-                <label>Username:</label>
-                <input type="text" name="username" required>
             </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit" class="btn">Login</button>
-        </form>
-    </div>
-
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-
-    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
-    
-
-
-</div>
-{% endblock content %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% comment %} <!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h2>Login</h2>
-    
-    <form method="POST">
-        {% csrf_token %}
-        <div>
-            <label>Username:</label>
-            <input type="text" name="username" required>
         </div>
-        <div>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-        </div>
-        <button type="submit">Login</button>
-    </form>
-
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
+    {% else %}
+        <p>You are already logged in.</p> 
     {% endif %}
-
-    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
-</body>
-</html>  {% endcomment %}
+{% endblock %}

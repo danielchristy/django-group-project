@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <button id="open-popup-btn">Open Popup</button>
+
+    {% include 'popup_base.html' %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/pop_test.js' %}"></script>
+{% endblock %}

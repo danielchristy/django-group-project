@@ -16,4 +16,6 @@ urlpatterns = [
     path('api/item/<int:item_id>/', views.item_detail, name='item_detail'),
     path('api/item/', views.create_item, name='create_item'),
     path('change_user/', views.change_user, name='change_user'),
+
+    path('popup_test/', views.popup_test, name='popup_base')
 ] 

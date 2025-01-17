@@ -203,3 +203,5 @@ def change_user(request):
 def home_page(request):
     return render(request, 'home.html')
         
+def popup_test(request):
+    return render(request, 'popup_test.html')
