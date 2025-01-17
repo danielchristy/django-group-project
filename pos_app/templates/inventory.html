@@ -9,8 +9,7 @@
             <input 
                 type="text" 
                 id="searchInput" 
-                placeholder="Search items..."
-                onkeyup="searchTable()"
+                placeholder="Search items by name, department, or barcode..."
             >
         </div>
         <button class="add-btn" onclick="showAddModal()">Add New Item</button>
@@ -28,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            {% comment %} {% for item in items %}
+            {% for item in items %}
                 <tr>
                     <td>{{ item.name }}</td>
                     <td>${{ item.cost }}</td>
@@ -44,7 +43,7 @@
                 <tr>
                     <td colspan="6">No items found</td>
                 </tr>
-            {% endfor %} {% endcomment %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
