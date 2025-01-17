@@ -26,41 +26,65 @@ function editItem(itemId) {
     const modal = document.getElementById('editModal');
     modal.style.display = 'block';
     
+   
     fetch(`/api/item/${itemId}/`)
         .then(response => response.json())
         .then(item => {
             document.getElementById('editItemId').value = item.id;
-            document.getElementById('editName').value = item.name;
+            document.getElementById('editItemName').textContent = item.name;
             document.getElementById('editCost').value = item.cost;
-            document.getElementById('editDepartment').value = item.department;
             document.getElementById('editAmount').value = item.amount;
-            document.getElementById('editBarcode').value = item.barcode;
-        });
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function closeEditModal() {
+    if (confirm('Are you sure you want to cancel? Any changes will be lost.')) {
+        const modal = document.getElementById('editModal');
+        modal.style.display = 'none';
+    }
 }
 
 // for deltin
 function deleteItem(itemId) {
-    if (confirm('Are you sure you want to delete this item?')) {
+    const itemName = document.querySelector(`tr[data-id="${itemId}"] td:first-child`).textContent;
+    if (confirm(`Are you sure you want to delete "${itemName}"? This action cannot be undone.`)) {
         fetch(`/api/item/${itemId}/`, {
             method: 'DELETE',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken')
             }
-        }).then(response => {
+        })
+        .then(response => {
             if (response.ok) {
+                alert('Item deleted successfully!');
                 location.reload();
+            } else {
+                throw new Error('Failed to delete item');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete item');
         });
     }
 }
 
 
 function showAddModal() {
-    document.getElementById('addModal').style.display = 'block';
+    const modal = document.getElementById('addModal');
+    modal.style.display = 'block';
+    //delted whole form /clear
+    document.getElementById('addForm').reset();
 }
 
 function closeAddModal() {
-    document.getElementById('addModal').style.display = 'none';
+    if (document.getElementById('addForm').checkValidity() && 
+        confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+        const modal = document.getElementById('addModal');
+        modal.style.display = 'none';
+        document.getElementById('addForm').reset();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -72,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Closes window
+    //closed teh widnows
     window.onclick = function(event) {
         const editModal = document.getElementById('editModal');
         const addModal = document.getElementById('addModal');
@@ -84,54 +108,75 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // submits the edit form
+    // for submittting
     document.getElementById('editForm').onsubmit = function(e) {
         e.preventDefault();
         const itemId = document.getElementById('editItemId').value;
+        const newCost = document.getElementById('editCost').value;
+        const newAmount = document.getElementById('editAmount').value;
         
-        fetch(`/api/item/${itemId}/`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({
-                name: document.getElementById('editName').value,
-                cost: document.getElementById('editCost').value,
-                department: document.getElementById('editDepartment').value,
-                amount: document.getElementById('editAmount').value,
-                barcode: document.getElementById('editBarcode').value
+        if (confirm('Are you sure you want to save these changes?')) {
+            fetch(`/api/item/${itemId}/`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    cost: newCost,
+                    amount: newAmount
+                })
             })
-        }).then(response => {
-            if (response.ok) {
-                location.reload();
-            }
-        });
+            .then(response => {
+                if (response.ok) {
+                    alert('Item updated successfully!');
+                    location.reload();
+                } else {
+                    throw new Error('Failed to update item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update item');
+            });
+        }
     }
 
     
     document.getElementById('addForm').onsubmit = function(e) {
         e.preventDefault();
         
-        fetch('/api/item/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')
-            },
-            body: JSON.stringify({
-                name: document.getElementById('addName').value,
-                cost: document.getElementById('addCost').value,
-                department: document.getElementById('addDepartment').value,
-                amount: document.getElementById('addAmount').value,
-                barcode: document.getElementById('addBarcode').value
+        const newItem = {
+            name: document.getElementById('addName').value,
+            cost: document.getElementById('addCost').value,
+            department: document.getElementById('addDepartment').value,
+            amount: document.getElementById('addAmount').value,
+            barcode: document.getElementById('addBarcode').value
+        };
+
+        if (confirm('Are you sure you want to add this item?')) {
+            fetch('/api/item/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(newItem)
             })
-        }).then(response => {
-            if (response.ok) {
-                location.reload();
-            }
-        });
-    }
+            .then(response => {
+                if (response.ok) {
+                    alert('Item added successfully!');
+                    location.reload();
+                } else {
+                    throw new Error('Failed to add item');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add item');
+            });
+        }
+    };
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {

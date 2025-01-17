@@ -10,6 +10,7 @@ from pos_app.forms import *
 from pos_app.models import *
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods
+import json
 
 
 def delete_all_items(request):
@@ -82,14 +83,61 @@ def admin_dashboard(request):
     return render(request, 'admin_dashboard.html')
         
 
-@require_http_methods(["DELETE", "GET", "PUT"])
+@require_http_methods(["GET", "PUT", "DELETE"])
 def item_detail(request, item_id):
     try:
         item = Item.objects.get(id=item_id)
-        if request.method == "DELETE":
+        
+        if request.method == "GET":
+            return JsonResponse({
+                'id': item.id,
+                'name': item.name,
+                'cost': float(item.cost),
+                'department': item.department,
+                'amount': item.amount,
+                'barcode': item.barcode
+            })
+            
+        elif request.method == "PUT":
+            data = json.loads(request.body)
+            item.cost = data.get('cost', item.cost)
+            item.amount = data.get('amount', item.amount)
+            item.save()
+            return JsonResponse({'message': 'Item updated successfully'})
+            
+        elif request.method == "DELETE":
             item.delete()
-            return JsonResponse({"message": "Item deleted successfully"})
-        # ... other methods will be added later ...
+            return JsonResponse({'message': 'Item deleted successfully'})
+            
     except Item.DoesNotExist:
-        return JsonResponse({"error": "Item not found"}, status=404)
+        return JsonResponse({'error': 'Item not found'}, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+        
+
+@require_http_methods(["POST"])
+def create_item(request):
+    try:
+        data = json.loads(request.body)
+        item = Item.objects.create(
+            name=data['name'],
+            cost=data['cost'],
+            department=data['department'],
+            amount=data['amount'],
+            barcode=data['barcode']
+        )
+        return JsonResponse({
+            'message': 'Item created successfully',
+            'id': item.id
+        }, status=201)
+    except KeyError as e:
+        return JsonResponse({
+            'error': f'Missing required field: {str(e)}'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e)
+        }, status=400)
         
