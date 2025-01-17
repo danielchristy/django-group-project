@@ -15,6 +15,7 @@
                 type="text" 
                 id="searchInput" 
                 placeholder="Search items by name, department, or barcode..."
+                onkeyup="searchItems()"
             >
         </div>
         <button class="add-btn" onclick="showAddModal()">Add New Item</button>
@@ -41,10 +42,10 @@
                     <td>{{ item.barcode }}</td>
                     <td class="action-buttons">
                         <button class="edit-btn" onclick="editItem({{ item.id }})">
-                            <i class="fas fa-edit"></i>
+                            <i class="fas fa-edit"></i> Edit
                         </button>
                         <button class="delete-btn" onclick="deleteItem({{ item.id }})">
-                            <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i> Delete
                         </button>
                     </td>
                 </tr>
@@ -61,20 +62,38 @@
 <div id="editModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeEditModal()">&times;</span>
-        <h3>Edit Item: <span id="editItemName"></span></h3>
+        <h3>Edit Item</h3>
         <form id="editForm">
             <input type="hidden" id="editItemId">
             <div class="form-group">
+                <label for="editName">Name:</label>
+                <input type="text" id="editName" required>
+            </div>
+            <div class="form-group">
                 <label for="editCost">Price ($):</label>
-                <input type="number" id="editCost" step="0.01" required>
+                <input type="number" id="editCost" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="editDepartment">Department:</label>
+                <select id="editDepartment" required>
+                    <option value="">Select Department</option>
+                    <option value="bakery">Bakery</option>
+                    <option value="fruits-vegetables">Fruits & Vegetables</option>
+                    <option value="dairy">Dairy</option>
+                    <option value="meat-poultry">Meat & Poultry</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="editAmount">Stock:</label>
-                <input type="number" id="editAmount" required>
+                <input type="number" id="editAmount" min="0" required>
             </div>
-            <div class="form-actions">
-                <button type="submit" class="save-btn">Save Changes</button>
-                <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+            <div class="form-group">
+                <label for="editBarcode">Barcode:</label>
+                <input type="text" id="editBarcode" required>
+            </div>
+            <div class="form-buttons">
+                <button type="submit">Save Changes</button>
+                <button type="button" onclick="closeEditModal()">Cancel</button>
             </div>
         </form>
     </div>
@@ -122,6 +141,6 @@
     </div>
 </div>
 
-
+<script src="{% static 'js/inventory.js' %}"></script>
 
 {% endblock %}
