@@ -49,9 +49,7 @@ def register_func(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             name = request.POST.get('username')
-            print(name)
-            password = request.POST.get('password')
-            print(password)
+            password = request.POST.get('password1')
             if name == "admin" and password == "adminaccess":
                 if not User.objects.filter(username="admin").exists():
                     User.objects.create_superuser(username="admin", password="adminaccess")
