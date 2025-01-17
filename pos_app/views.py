@@ -185,3 +185,21 @@ def search_item(request):
     except Item.DoesNotExist:
         return JsonResponse(None, safe=False)
         
+#this is for the pin to swtich user i have it currently mapped to the hyperinlin on top that aays 
+#switch user once you figure out wher eyou want it you can used this fucntion and the assing role.thml
+#just wantedot have soemthing s
+@login_required
+def change_user(request):
+    if request.method == 'POST':
+        pin = request.POST.get('manager_pin')
+        if pin == '1234': #temporary oin we are using 
+            return redirect('role')  # Redirect to role selection
+        else:
+            return render(request, 'change_user.html', {'error': 'Invalid PIN'})
+    return render(request, 'change_user.html')
+        
+
+@login_required
+def home_page(request):
+    return render(request, 'home.html')
+        

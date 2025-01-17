@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/change_user.css' %}">
+</head>
+<!--all the styling for this is in its own css fiel in the css i giured the origna css was getting to long-->
+<div class="pin-container">
+    <h2>Manager Authorization Required</h2>
+    <form method="POST" class="pin-form">
+        {% csrf_token %}
+        <div class="pin-input">
+            <label for="manager_pin">Enter Manager PIN:</label>
+            <input type="password" id="manager_pin" name="manager_pin" 
+                   maxlength="4" pattern="\d{4}" required 
+                   placeholder="****">
+        </div>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <button type="submit" class="pin-submit">Submit</button>
+        <a href="{% url 'sales' %}" class="cancel-btn">Cancel</a>
+    </form>
+</div>
+{% endblock %} 
