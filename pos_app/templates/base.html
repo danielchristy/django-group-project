@@ -20,7 +20,7 @@
                             <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
                             <li><a href="{% url 'admin:index' %}">Django Admin</a></li>
                         {% endif %}
-                        <li><a href="/change_user">Switch User</a></li>
+                        <li><a href="switch_user">Switch User</a></li>
                         <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% else %}
                         <li><a href="{% url 'login' %}">Login</a></li>
