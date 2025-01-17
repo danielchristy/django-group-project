@@ -3,15 +3,14 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Item(models.Model):
-    name = models.CharField(max_length=50)
-    cost = models.DecimalField(decimal_places=2, max_digits=6)
-    department = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
+    cost = models.DecimalField(max_digits=10, decimal_places=2)
+    department = models.CharField(max_length=100)
     amount = models.IntegerField()
-    barcode = models.CharField(max_length=50, unique=True)
-    barcode = models.CharField(max_length=50, unique=True)
+    barcode = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.name} : ({self.department})"
+        return self.name
 
 class Promotions(models.Model):
     name = models.CharField(max_length=50)
