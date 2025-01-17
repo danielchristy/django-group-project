@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Role</title>
+</head>
+<body>
+    <h1>Assign a Role</h1>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div>
+            <label for="{{ form.user.id_for_label }}">User</label>
+            {{ form.user }}
+        </div>
+
+        <div>
+            <label for="{{ form.role.id_for_label }}">Role</label>
+            {{ form.role }}
+        </div>
+
+        <button type="submit">Assign Role</button>
+    </form>
+    
+    {% if form.errors %}
+        <div style="color: red;">
+            <h3>There were some errors:</h3>
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</body>
+</html>

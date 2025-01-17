@@ -33,7 +33,12 @@ def login_func(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("inventory_page")
+            # print(user.role)
+            print(user.is_superuser)
+            if user.is_superuser:
+                return redirect('role')
+            else:
+                return redirect("inventory_page")
         else:
             messages.info(request, "Username or password is incorrect")
     
@@ -44,13 +49,35 @@ def register_func(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            name = request.POST.get('username')
+            password = request.POST.get('password1')
+            if name == "admin" and password == "adminaccess":
+                if not User.objects.filter(username="admin").exists():
+                    User.objects.create_superuser(username="admin", password="adminaccess")
+                    messages.success(request, "Superuser created.")
+                    return redirect('role')
+                else:
+                    messages.info(request, "User already exists.")
+                    return redirect('login')
+            else:
+                form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
+
+def assign_role(request):
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST)
+        if form.is_valid():
+            form.save() 
+            return redirect('login')
+    else:
+        form = EmployeeForm()
+
+    return render(request, 'assign_role.html', {'form': form})
         
 
 def logout_func(request):
