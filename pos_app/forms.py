@@ -20,3 +20,7 @@ class SignInForm(forms.Form):
 
         return cleaned_data
 
+class EmployeeForm(forms.ModelForm):
+    class Meta:
+        model = Role
+        fields = ['user', 'role']

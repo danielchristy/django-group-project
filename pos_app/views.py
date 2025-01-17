@@ -49,6 +49,17 @@ def register_func(request):
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
+
+def assign_role(request):
+    if request.method == 'POST':
+        form = EmployeeForm(request.POST)
+        if form.is_valid():
+            form.save() 
+            return redirect('login')
+    else:
+        form = EmployeeForm()
+
+    return render(request, 'assign_role.html', {'form': form})
         
 
 def logout_func(request):
