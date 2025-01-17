@@ -27,29 +27,15 @@
             <table id='checkout-list-table'>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Item Description</th>
-                        <th>Quantity</th>
+                        <th>Item Name</th>
                         <th>Price</th>
+                        <th>Quantity</th>
                         <th>Total</th>
-                        {% comment %} <th>Actions</th> {% endcomment %}
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id='checkout-items'>
-                    {% for item in checkout_items %}
-                    <tr item-id='{{ item.id }}'>
-                        <td>{{ item.name }}</td>
-                        <td>${{ item.cost }}</td>
-                        <td>{{ item.department }}</td>
-                        {% comment %} <td>quantity</td> {% endcomment %}
-                        <td>{{ item.amount }}</td>
-                        {% comment %} <td>item total</td> {% endcomment %}
-                    </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan='6'>No Items Have Been Rang Up</td>
-                        </tr>
-                    {% endfor %}
+                    <!-- Items will be added here dynamically -->
                 </tbody>
             </table>
         </div>
@@ -96,5 +82,93 @@
     </div>
 </div>
 
+<script>
+document.getElementById('search-btn').addEventListener('click', searchItem);
+document.getElementById('barcode').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchItem();
+    }
+});
+
+function searchItem() {
+    const barcode = document.getElementById('barcode').value;
+    
+    fetch(`/api/item/search/?barcode=${barcode}`)
+        .then(response => response.json())
+        .then(item => {
+            if (item) {
+                addItemToCheckout(item);
+                document.getElementById('barcode').value = ''; // Clear input
+            } else {
+                alert('Item not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error searching for item');
+        });
+}
+
+function addItemToCheckout(item) {
+    const tbody = document.getElementById('checkout-items');
+    
+    // Check if item already exists in checkout
+    const existingRow = tbody.querySelector(`tr[data-item-id="${item.id}"]`);
+    if (existingRow) {
+        // Increment quantity if item exists
+        const quantityInput = existingRow.querySelector('.quantity-input');
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+        updateRowTotal(existingRow);
+    } else {
+        // Add new row if item doesn't exist
+        const row = document.createElement('tr');
+        row.setAttribute('data-item-id', item.id);
+        
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>$${item.cost}</td>
+            <td>
+                <input type="number" class="quantity-input" value="1" min="1" 
+                       onchange="updateRowTotal(this.parentElement.parentElement)">
+            </td>
+            <td>$${item.cost}</td>
+            <td>
+                <button onclick="removeItem(this.parentElement.parentElement)">Remove</button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    }
+    
+    updateTotals();
+}
+
+function updateRowTotal(row) {
+    const price = parseFloat(row.cells[1].textContent.replace('$', ''));
+    const quantity = parseInt(row.querySelector('.quantity-input').value);
+    const total = price * quantity;
+    row.cells[3].textContent = `$${total.toFixed(2)}`;
+    updateTotals();
+}
+
+function removeItem(row) {
+    row.remove();
+    updateTotals();
+}
+
+function updateTotals() {
+    let subtotal = 0;
+    document.querySelectorAll('#checkout-items tr').forEach(row => {
+        subtotal += parseFloat(row.cells[3].textContent.replace('$', ''));
+    });
+    
+    const tax = subtotal * 0.07;
+    const total = subtotal + tax;
+    
+    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+    document.getElementById('grand-total').textContent = `$${total.toFixed(2)}`;
+}
+</script>
 
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -85,7 +85,10 @@ def logout_func(request):
     messages.success(request, "Logging out.")
     return redirect('login')
         
-@login_required(login_url='login')
+def is_superuser(user):
+    return user.is_superuser
+
+@login_required
 def show_all_items(request):
     items = Item.objects.all()
     return render(request, 'inventory.html', {'items': items})
@@ -167,4 +170,18 @@ def create_item(request):
         return JsonResponse({
             'error': str(e)
         }, status=400)
+        
+##testing stuff for the search feature on the main pos screene
+def search_item(request):
+    barcode = request.GET.get('barcode')
+    try:
+        item = Item.objects.get(barcode=barcode)
+        return JsonResponse({
+            'id': item.id,
+            'name': item.name,
+            'cost': float(item.cost),
+            'barcode': item.barcode
+        })
+    except Item.DoesNotExist:
+        return JsonResponse(None, safe=False)
         
