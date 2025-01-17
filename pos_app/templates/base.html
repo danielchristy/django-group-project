@@ -33,6 +33,26 @@
             </div>
         </header>
     {% endif %}
+
+    <script type="text/javascript">
+        let timeout;
+        const logoutTime = 120000; 
+
+        function logout() {
+            window.location.href = "{% url 'logout' %}";
+        }
+
+        function resetTimeout() {
+            clearTimeout(timeout);
+            timeout = setTimeout(logout, logoutTime);
+        }
+
+        document.addEventListener("mousemove", resetTimeout);
+        document.addEventListener("keydown", resetTimeout);
+        document.addEventListener("scroll", resetTimeout);
+
+        resetTimeout();
+    </script>
     
     {% block content %}{% endblock %}
     

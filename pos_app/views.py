@@ -55,7 +55,7 @@ def register_func(request):
                 if not User.objects.filter(username="admin").exists():
                     User.objects.create_superuser(username="admin", password="adminaccess")
                     messages.success(request, "Superuser created.")
-                    return redirect('role')
+                    return redirect('login')
                 else:
                     messages.info(request, "User already exists.")
                     return redirect('login')
@@ -68,6 +68,7 @@ def register_func(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
+@user_passes_test(lambda u: u.is_superuser, login_url='login')
 def assign_role(request):
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
