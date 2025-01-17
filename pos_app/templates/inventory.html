@@ -33,54 +33,49 @@
         </thead>
         <tbody>
             {% for item in items %}
-                <tr>
+                <tr data-id="{{ item.id }}">
                     <td>{{ item.name }}</td>
                     <td>${{ item.cost }}</td>
                     <td>{{ item.department }}</td>
                     <td>{{ item.amount }}</td>
                     <td>{{ item.barcode }}</td>
                     <td class="action-buttons">
-                        <button class="edit-btn" onclick="editItem({{ item.id }})">Edit</button>
-                        <button class="delete-btn" onclick="deleteItem({{ item.id }})">Delete</button>
+                        <button class="edit-btn" onclick="editItem({{ item.id }})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-btn" onclick="deleteItem({{ item.id }})">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="6">No items found</td>
+                    <td colspan="6" class="no-items">No items found</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-<!--this is the the winodw wher you can add another item i havent added proper css yet  -->
+<!-- Editing the pop up windwo thing -->
 <div id="editModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <h3>Edit Item</h3>
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h3>Edit Item: <span id="editItemName"></span></h3>
         <form id="editForm">
             <input type="hidden" id="editItemId">
-            <div>
-                <label for="editName">Name:</label>
-                <input type="text" id="editName" required>
-            </div>
-            <div>
-                <label for="editCost">Price:</label>
+            <div class="form-group">
+                <label for="editCost">Price ($):</label>
                 <input type="number" id="editCost" step="0.01" required>
             </div>
-            <div>
-                <label for="editDepartment">Department:</label>
-                <input type="text" id="editDepartment" required>
-            </div>
-            <div>
+            <div class="form-group">
                 <label for="editAmount">Stock:</label>
                 <input type="number" id="editAmount" required>
             </div>
-            <div>
-                <label for="editBarcode">Barcode:</label>
-                <input type="text" id="editBarcode" required>
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Save Changes</button>
+                <button type="button" class="cancel-btn" onclick="closeEditModal()">Cancel</button>
             </div>
-            <button type="submit">Save Changes</button>
         </form>
     </div>
 </div>
@@ -91,27 +86,38 @@
         <span class="close" onclick="closeAddModal()">&times;</span>
         <h3>Add New Item</h3>
         <form id="addForm">
-            <div>
+            <div class="form-group">
                 <label for="addName">Name:</label>
                 <input type="text" id="addName" required>
             </div>
-            <div>
-                <label for="addCost">Price:</label>
-                <input type="number" id="addCost" step="0.01" required>
+            <div class="form-group">
+                <label for="addCost">Price ($):</label>
+                <input type="number" id="addCost" step="0.01" min="0" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="addDepartment">Department:</label>
-                <input type="text" id="addDepartment" required>
+                <select id="addDepartment" required>
+                    <option value="">Select Department</option>
+                    <option value="Grocery">Grocery</option>
+                    <option value="Produce">Produce</option>
+                    <option value="Bakery">Bakery</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Electronics">Electronics</option>
+                </select>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="addAmount">Stock:</label>
-                <input type="number" id="addAmount" required>
+                <input type="number" id="addAmount" min="0" required>
             </div>
-            <div>
+            <div class="form-group">
                 <label for="addBarcode">Barcode:</label>
                 <input type="text" id="addBarcode" required>
             </div>
-            <button type="submit">Add Item</button>
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Add Item</button>
+                <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
+            </div>
         </form>
     </div>
 </div>
