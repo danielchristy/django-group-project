@@ -1,4 +1,63 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% block extra_css %}{% load static %}{% endblock %}
+
+{% block content %}
+<head>
+    <link rel='stylesheet' href='{% static 'css/login.css' %}'>
+</head>
+
+<div class='login-container'>
+    <h2>Login</h2>
+
+    <div class='login-info-container'>
+        <form method="POST" class="loginform">
+            {% csrf_token %}
+            <div>
+                <label>Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div>
+                <label>Password:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    
+
+
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
 <html>
 <head>
     <title>Login</title>
@@ -27,4 +86,4 @@
 
     <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
 </body>
-</html> 
+</html>  {% endcomment %}
