@@ -1,11 +1,11 @@
-// hadnling updates for transaction info
+//this is the main js file for the sales page
 
 document.addEventListener('DOMContentLoaded', function () {
     let subtotal = 0;
     let taxRate = 0.07;
-    window.discount = 0;  // Make discount globally accessible
+    window.discount = 0; 
 
-    // Make updateTransaction globally available
+    
     window.updateTransaction = function() {
         let tax = subtotal * taxRate;
         let grandTotal = subtotal + tax - window.discount;
@@ -29,8 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         updateTransaction();
     }
-
-    // event listeners for changes in checkout list
+    //this is for if they change stuff in the list
     document.querySelectorAll('.item-quantity').forEach(function (input) {
         input.addEventListener('change', updateSubtotal);
     });
@@ -43,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // event listeners for applying discounts
+    //event listeners for discoutns
     const discountButtons = {
         'discount-single-item': 0.15,
         'discount-rewards-member': 0.10,
@@ -51,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'discount-manager': 1.00
     };
 
-    // Only add direct event listener for rewards member discount
+   
     const rewardsButton = document.getElementById('discount-rewards-member');
     if (rewardsButton) {
         rewardsButton.addEventListener('click', function() {
@@ -60,10 +59,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Remove any other discount button event listeners from sales.js
-    // The PIN-protected discounts will be handled by discount_handler.js
+    //Remove any other discount button event listeners from sales.js
+    //The PIN-protected discounts will be handled by discount_handler.js
 
-    // Make addItemToCheckout available globally
+    //Make addItemToCheckout available globally
     window.addItemToCheckout = function(item) {
         const checkoutItems = document.getElementById('checkout-items');
         
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Create new row for item
+        //for making new rows
         const row = document.createElement('tr');
         row.dataset.itemId = item.id;
         row.innerHTML = `
@@ -95,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
         `;
 
-        // Add event listeners for the new row
+        
         const quantityInput = row.querySelector('.item-quantity');
         quantityInput.addEventListener('change', updateSubtotal);
 

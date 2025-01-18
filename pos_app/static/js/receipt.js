@@ -1,7 +1,7 @@
 console.log('Receipt.js is loading...');
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Add pay button handler
+    //for the pay button
     const payBtn = document.getElementById('pay-btn');
     if (payBtn) {
         payBtn.addEventListener('click', function() {
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Get all items from checkout
+            //lets us get all the stuff from checkout
             const items = [];
             document.querySelectorAll('#checkout-items tr').forEach(row => {
                 items.push({
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Get transaction totals
+            
             const subtotalAmount = parseFloat(document.getElementById('subtotal').textContent.replace('$', ''));
             const taxAmount = parseFloat(document.getElementById('tax').textContent.replace('$', ''));
             const discountAmount = parseFloat(document.getElementById('discount').textContent.replace('$', ''));
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 date: new Date()
             });
 
-            // Clear the checkout list
+           
             document.getElementById('checkout-items').innerHTML = '';
             // Trigger update of totals
             if (typeof updateSubtotal === 'function') {
@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
+//the css for the recipt 
 function createReceiptModal() {
     const modal = document.createElement('div');
     modal.id = 'receiptModal';
     modal.className = 'modal';
     modal.style.display = 'none';
     
-    // Add CSS styles for modal positioning and display
+  
     modal.style.position = 'fixed';
     modal.style.zIndex = '1000';
     modal.style.left = '0';
@@ -64,7 +64,7 @@ function createReceiptModal() {
     modal.style.alignItems = 'center';
     modal.style.justifyContent = 'center';
     
-    // Update modal content styles
+   
     const modalContent = `
         <div class="modal-content receipt-paper" style="
             background-color: white;
@@ -126,7 +126,7 @@ function createReceiptModal() {
     
     modal.innerHTML = modalContent;
     
-    // Add click event to close modal when clicking outside
+    //with this they can click anywher and it closes the recipt 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeReceiptModal();
@@ -137,17 +137,17 @@ function createReceiptModal() {
 }
 
 function showReceipt(data) {
-    // Remove existing modal if it exists
+   
     let existingModal = document.getElementById('receiptModal');
     if (existingModal) {
         existingModal.remove();
     }
 
-    // Create and append new modal
+   
     const modal = createReceiptModal();
     document.body.appendChild(modal);
 
-    // Force the browser to recalculate styles
+   
     modal.offsetHeight;
 
     // Get references to elements
@@ -157,10 +157,10 @@ function showReceipt(data) {
     const receiptTax = document.getElementById('receiptTax');
     const receiptTotal = document.getElementById('receiptTotal');
 
-    // Set date
+    //for date
     receiptDate.textContent = data.date.toLocaleString();
 
-    // Set items
+    //Set items
     receiptItems.innerHTML = `
         <table style="width: 100%; margin-bottom: 10px;">
             <tr>
@@ -180,7 +180,7 @@ function showReceipt(data) {
         </table>
     `;
 
-    // Set totals
+    //for total
     receiptSubtotal.textContent = data.subtotal.toFixed(2);
     receiptTax.textContent = data.tax.toFixed(2);
     if (data.discount > 0) {
@@ -191,26 +191,26 @@ function showReceipt(data) {
     }
     receiptTotal.textContent = data.total.toFixed(2);
 
-    // Show modal with a slight delay to ensure proper rendering
+    //delay to show the modal
     requestAnimationFrame(() => {
         modal.style.display = 'flex';
     });
 }
 
-// Update close function to use proper display style
+//Update close function to use proper display style
 function closeReceiptModal() {
     const modal = document.getElementById('receiptModal');
     if (modal) {
         modal.style.display = 'none';
-        setTimeout(() => modal.remove(), 300); // Remove after animation
+        setTimeout(() => modal.remove(), 300); 
         
-        // Clear all totals
+       
         document.getElementById('subtotal').textContent = '$0.00';
         document.getElementById('tax').textContent = '$0.00';
         document.getElementById('discount').textContent = '$0.00';
         document.getElementById('grand-total').textContent = '$0.00';
         
-        // Clear checkout items
+        //clears the checkout items
         document.getElementById('checkout-items').innerHTML = '';
     }
 }
