@@ -36,7 +36,7 @@ def login_func(request):
             login(request, user)
             print(user.is_superuser)
             if user.is_superuser:
-                return redirect('admin_dashboard')
+                return redirect('sales')
             else:
                 return redirect("inventory_page")
         else:
@@ -83,7 +83,7 @@ def assign_role(request):
 
 def logout_func(request):
     logout(request)
-    messages.success(request, "Logged out.")
+   
     return redirect('login')
         
 def is_superuser(user):

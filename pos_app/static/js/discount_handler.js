@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Create and append PIN modal
+    //for the window manager of pin
     const pinModal = document.createElement('div');
     pinModal.className = 'pin-modal';
     pinModal.style.cssText = 'display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;';
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.body.appendChild(pinModal);
 
-    // Setup event listeners
+    //all the event listenrs for the pin window thing
     const managerDiscountBtn = document.getElementById('discount-manager');
     if (managerDiscountBtn) {
         managerDiscountBtn.addEventListener('click', e => {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('.pin-error').textContent = '';
     }
 
-    // Close modal handlers
+    
     document.querySelector('.close').onclick = () => {
         pinModal.style.display = 'none';
         clearInputs();
