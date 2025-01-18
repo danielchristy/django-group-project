@@ -132,7 +132,9 @@ def item_detail(request, item_id):
         elif request.method == "PUT":
             data = json.loads(request.body)
             item.cost = data.get('cost', item.cost)
+            item.department = data.get('department', item.department)
             item.amount = data.get('amount', item.amount)
+            item.barcode = data.get('barcode', item.barcode)
             item.save()
             return JsonResponse({'message': 'Item updated successfully'})
             
