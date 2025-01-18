@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 /* app color variables */
 :root[data-theme='light'] {
     /* background */
@@ -136,42 +140,47 @@
 
 /* login */
 .login-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: var(--container-background);
-    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
     border-radius: 1rem;
     text-align: center;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 40vw;
+    min-height: 60vh;
+    box-sizing: border-box;
+    gap: 0.5rem;
+    overflow: visible;
 }
 
 .login-title {
     color: var(--text-primary);
     font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: .75rem;
 }
 
 .login-form {
     display: flex;
     flex-direction: column;
+    width: 75%;
     gap: 1.25rem;
 }
 
-.login-form input {
-    padding: .75rem;
+.login-form input,
+.login-form button {
+    width: 100%;
+    padding: 0.75rem;
     font-size: 1rem;
-    border: .1rem solid var(--border-color);
-    border-radius: .85rem;
+    border: 0.1rem solid var(--border-color);
+    border-radius: 0.85rem;
     outline: none;
     color: var(--text-primary);
     background-color: var(--background);
+    box-sizing: border-box;
 }
-
-/* .login-form input:focus {
-    transform: scale(1.1);
-} */
 
 .login-form input::placeholder {
     color: var(--text-secondary);
@@ -198,6 +207,11 @@
 
 .login-form button:focus {
     outline: 2px solid var(--accent-teal);
+}
+
+.login-container p,
+.login-container button {
+    margin: 0.5rem 0;
 }
 
 /* base app styling */
@@ -266,6 +280,11 @@ a:hover {
     max-width: 75rem;
     margin: 0 auto;
     padding: 0 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
 table {
@@ -367,8 +386,23 @@ nav a:focus {
     margin-top: 1rem;
 }
 
+@media (max-width: 350px) {
+    .login-container {
+        padding: 1rem; 
+        width: 95%; 
+        max-width: 100%; 
+        min-height: 50vh; 
+    }
+}
 
-
+@media (max-width: 600px) {
+    .login-container {
+        padding: 1.5rem;
+        width: 95%;
+        max-width: 100%;
+        min-width: 270px;
+    }
+}
 
 @media (min-width: 600px) {
     .container {
