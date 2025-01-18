@@ -152,6 +152,11 @@ def item_detail(request, item_id):
 def create_item(request):
     try:
         data = json.loads(request.body)
+        barcode = data.get('barcode')
+        if Item.objects.filter(barcode=barcode).exists():
+            return JsonResponse({
+                'error': 'This barcode is already in use.'
+            }, status=400)
         item = Item.objects.create(
             name=data['name'],
             cost=data['cost'],

@@ -1,16 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
 
 class Item(models.Model):
     name = models.CharField(max_length=200)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     department = models.CharField(max_length=100)
     amount = models.IntegerField()
-    barcode = models.CharField(max_length=100)
+    barcode = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
+    
 
 class Promotions(models.Model):
     name = models.CharField(max_length=50)
