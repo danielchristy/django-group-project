@@ -78,31 +78,10 @@
 </div>
 
 
-<div id="receiptModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
-    <div style="background: white; margin: 15% auto; padding: 20px; width: 300px;">
-        <span onclick="closeReceiptModal()" style="float: right; cursor: pointer;">&times;</span>
-        <h3>Receipt</h3>
-        <div id="receiptContent">
-            <div style="text-align: center; margin-bottom: 10px;">
-                <h4>Temporry text we need ot update soon</h4>
-                <p>Date: <span id="receiptDate"></span></p>
-            </div>
-            <div id="receiptItems" style="margin: 15px 0;">
-             
-            </div>
-            <div style="border-top: 1px solid #ddd; padding-top: 10px;">
-                <p>Subtotal: $<span id="receiptSubtotal">0.00</span></p>
-                <p>Tax: $<span id="receiptTax">0.00</span></p>
-                <p><strong>Total: $<span id="receiptTotal">0.00</span></strong></p>
-            </div>
-            <p style="text-align: center; margin-top: 20px;">Thank you for shopping!</p>
-        </div>
-        <button onclick="window.print()" style="width: 100%; padding: 10px; margin-top: 10px;">Print Receipt</button>
-    </div>
-</div>
 
-{% block extra_js %}
+
 <script src="{% static 'js/receipt.js' %}"></script>
-{% endblock %}
+<script src="{% static 'js/sales.js' %}"></script>
+<script src="{% static 'js/search_handler.js' %}"></script>
 
 {% endblock %}

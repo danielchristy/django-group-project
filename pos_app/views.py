@@ -11,6 +11,7 @@ from pos_app.models import *
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_http_methods
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 
 def delete_all_items(request):
@@ -172,21 +173,35 @@ def create_item(request):
         }, status=400)
         
 ##testing stuff for the search feature on the main pos screene
+@csrf_exempt
 def search_item(request):
+    print("Search view called")  # Debug log
+    print("Request method:", request.method)  # Debug log
+    print("Request GET params:", request.GET)  # Debug log
+    
     barcode = request.GET.get('barcode')
+    print(f"Searching for barcode: {barcode}")  # Debug log
+    
     try:
         item = Item.objects.get(barcode=barcode)
-        return JsonResponse({
+        print(f"Found item: {item.name}")  # Debug log
+        
+        response_data = {
             'id': item.id,
             'name': item.name,
             'cost': float(item.cost),
             'department': item.department,
             'amount': item.amount,
             'barcode': item.barcode
-        })
+        }
+        print("Sending response:", response_data)  # Debug log
+        return JsonResponse(response_data)
+        
     except Item.DoesNotExist:
+        print(f"No item found with barcode: {barcode}")  # Debug log
         return JsonResponse({'error': 'Item not found'}, status=404)
     except Exception as e:
+        print(f"Error: {str(e)}")  # Debug log
         return JsonResponse({'error': str(e)}, status=400)
         
 #this is for the pin to swtich user i have it currently mapped to the hyperinlin on top that aays 

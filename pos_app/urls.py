@@ -17,4 +17,8 @@ urlpatterns = [
     path('api/item/', views.create_item, name='create_item'),
     path('change_user/', views.change_user, name='change_user'),
     path('api/item/search/', views.search_item, name='search_item'),
+    path('search-item/', views.search_item, name='search_item'),
 ] 
+
+# Add this print statement to debug
+print("Available URLs:", [url.pattern for url in urlpatterns]) 

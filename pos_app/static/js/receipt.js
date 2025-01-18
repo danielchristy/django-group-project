@@ -1,240 +1,210 @@
+console.log('Receipt.js is loading...');
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Receipt.js loaded');
-    
-    const searchBtn = document.getElementById('search-btn');
-    const barcodeInput = document.getElementById('barcode');
-    
-    if (searchBtn) {
-        console.log('Search button found');
-        searchBtn.addEventListener('click', searchItem);
-    } else {
-        console.error('Search button not found');
-    }
-    
-    if (barcodeInput) {
-        console.log('Barcode input found');
-        barcodeInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchItem();
-            }
-        });
-    } else {
-        console.error('Barcode input not found');
-    }
-});
-
-
-document.getElementById('search-btn').addEventListener('click', searchItem);
-document.getElementById('barcode').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        searchItem();
-    }
-});
-
-function searchItem() {
-    const barcode = document.getElementById('barcode').value;
-    console.log('Searching for barcode:', barcode);
-    
-    fetch(`/api/item/search/?barcode=${barcode}`)
-        .then(response => {
-            console.log('Search response:', response);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Search data:', data);
-            if (data.error) {
-                alert('Item not found');
-            } else {
-                addItemToCheckout(data);
-                document.getElementById('barcode').value = '';
-            }
-        })
-        .catch(error => {
-            console.error('Search error:', error);
-            alert('Error searching for item');
-        });
-}
-
-function addItemToCheckout(item) {
-    const tbody = document.getElementById('checkout-items');
-  
-    const existingRow = tbody.querySelector(`tr[data-item-id="${item.id}"]`);
-    if (existingRow) {
-       
-        const quantityInput = existingRow.querySelector('.quantity-input');
-        quantityInput.value = parseInt(quantityInput.value) + 1;
-        updateRowTotal(existingRow);
-    } else {
-       
-        const row = document.createElement('tr');
-        row.setAttribute('data-item-id', item.id);
-        
-        row.innerHTML = `
-            <td>${item.name}</td>
-            <td>$${item.cost}</td>
-            <td>
-                <input type="number" class="quantity-input" value="1" min="1" 
-                       onchange="updateRowTotal(this.parentElement.parentElement)">
-            </td>
-            <td>$${item.cost}</td>
-            <td>
-                <button onclick="removeItem(this.parentElement.parentElement)">Remove</button>
-            </td>
-        `;
-        
-        tbody.appendChild(row);
-    }
-    
-    updateTotals();
-}
-
-function updateRowTotal(row) {
-    const price = parseFloat(row.cells[1].textContent.replace('$', ''));
-    const quantity = parseInt(row.querySelector('.quantity-input').value);
-    const total = price * quantity;
-    row.cells[3].textContent = `$${total.toFixed(2)}`;
-    updateTotals();
-}
-
-function removeItem(row) {
-    row.remove();
-    updateTotals();
-}
-
-function updateTotals() {
-    let subtotal = 0;
-    document.querySelectorAll('#checkout-items tr').forEach(row => {
-        subtotal += parseFloat(row.cells[3].textContent.replace('$', ''));
-    });
-    
-    const tax = subtotal * 0.07;
-    const total = subtotal + tax;
-    
-    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-    document.getElementById('grand-total').textContent = `$${total.toFixed(2)}`;
-}
-
-
-function showReceipt() {
-    const modal = document.getElementById('receiptModal');
-    const receiptItems = document.getElementById('receipt-items');
-    const datetime = new Date().toLocaleString();
-   
-    receiptItems.innerHTML = '';
-    
-    /
-    document.querySelectorAll('#checkout-items tr').forEach(row => {
-        const name = row.cells[0].textContent;
-        const price = row.cells[1].textContent;
-        const quantity = row.querySelector('.quantity-input').value;
-        const total = row.cells[3].textContent;
-        
-        const receiptRow = document.createElement('tr');
-        receiptRow.innerHTML = `
-            <td>${name}</td>
-            <td>${quantity}</td>
-            <td>${price}</td>
-            <td>${total}</td>
-        `;
-        receiptItems.appendChild(receiptRow);
-    });
-    
-
-    document.getElementById('receipt-subtotal').textContent = document.getElementById('subtotal').textContent;
-    document.getElementById('receipt-tax').textContent = document.getElementById('tax').textContent;
-    document.getElementById('receipt-total').textContent = document.getElementById('grand-total').textContent;
-    
-
-    document.querySelector('.receipt-datetime').textContent = datetime;
-    
-    modal.style.display = 'block';
-}
-
-function closeReceiptModal() {
- 
-    document.getElementById('receiptModal').style.display = 'none';
-    
-   
-    document.getElementById('checkout-items').innerHTML = '';
-    
-   
-    document.getElementById('subtotal').textContent = '$0.00';
-    document.getElementById('tax').textContent = '$0.00';
-    document.getElementById('grand-total').textContent = '$0.00';
-    document.getElementById('discount').textContent = '$0.00';
-    
-   
-    document.getElementById('barcode').value = '';
-}
-
-function printReceipt() {
-    window.print();
-}
-
-
-document.addEventListener('DOMContentLoaded', function() {
+    // Add pay button handler
     const payBtn = document.getElementById('pay-btn');
     if (payBtn) {
-        payBtn.addEventListener('click', showReceipt);
-    }
+        payBtn.addEventListener('click', function() {
+            if (document.getElementById('checkout-items').children.length === 0) {
+                alert('No items in checkout');
+                return;
+            }
 
-    const closeBtn = document.querySelector('.close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeReceiptModal);
+            // Get all items from checkout
+            const items = [];
+            document.querySelectorAll('#checkout-items tr').forEach(row => {
+                items.push({
+                    name: row.querySelector('td:nth-child(1)').textContent,
+                    price: parseFloat(row.querySelector('td:nth-child(2)').textContent.replace('$', '')),
+                    quantity: parseInt(row.querySelector('.item-quantity').value),
+                    total: parseFloat(row.querySelector('.item-total').textContent.replace('$', ''))
+                });
+            });
+
+            // Get transaction totals
+            const subtotalAmount = parseFloat(document.getElementById('subtotal').textContent.replace('$', ''));
+            const taxAmount = parseFloat(document.getElementById('tax').textContent.replace('$', ''));
+            const discountAmount = parseFloat(document.getElementById('discount').textContent.replace('$', ''));
+            const grandTotal = parseFloat(document.getElementById('grand-total').textContent.replace('$', ''));
+
+            showReceipt({
+                items: items,
+                subtotal: subtotalAmount,
+                tax: taxAmount,
+                discount: discountAmount,
+                total: grandTotal,
+                date: new Date()
+            });
+
+            // Clear the checkout list
+            document.getElementById('checkout-items').innerHTML = '';
+            // Trigger update of totals
+            if (typeof updateSubtotal === 'function') {
+                updateSubtotal();
+            }
+        });
     }
 });
 
-function showReceiptModal() {
-    const modal = document.getElementById('receiptModal');
-    const items = document.getElementById('checkout-items').getElementsByTagName('tr');
+function createReceiptModal() {
+    const modal = document.createElement('div');
+    modal.id = 'receiptModal';
+    modal.className = 'modal';
+    modal.style.display = 'none';
+    
+    // Add CSS styles for modal positioning and display
+    modal.style.position = 'fixed';
+    modal.style.zIndex = '1000';
+    modal.style.left = '0';
+    modal.style.top = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0,0,0,0.4)';
+    modal.style.display = 'none';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    
+    // Update modal content styles
+    const modalContent = `
+        <div class="modal-content receipt-paper" style="
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 500px;
+            width: 90%;
+            margin: 20px auto;
+            position: relative;
+        ">
+            <span class="close" onclick="closeReceiptModal()">&times;</span>
+            <div class="receipt">
+                <div class="receipt-header">
+                    <h2>STORE NAME</h2>
+                    <p>123 Store Street</p>
+                    <p>City, State 12345</p>
+                    <p>Tel: (123) 456-7890</p>
+                </div>
+
+                <div class="receipt-divider">================================</div>
+
+                <div class="receipt-datetime">
+                    Date: <span id="receiptDate"></span>
+                </div>
+
+                <div class="receipt-items" id="receiptItems">
+                    <!-- Items will be populated by JavaScript -->
+                </div>
+
+                <div class="receipt-divider">================================</div>
+
+                <div class="summary-line">
+                    <span>Subtotal:</span>
+                    <span>$<span id="receiptSubtotal">0.00</span></span>
+                </div>
+                <div class="summary-line">
+                    <span>Tax:</span>
+                    <span>$<span id="receiptTax">0.00</span></span>
+                </div>
+                <div id="discountRow" class="summary-line">
+                    <span>Discount:</span>
+                    <span>$<span id="receiptDiscount">0.00</span></span>
+                </div>
+                <div class="summary-line total">
+                    <span>Total:</span>
+                    <span>$<span id="receiptTotal">0.00</span></span>
+                </div>
+
+                <div class="receipt-divider">================================</div>
+
+                <div class="receipt-footer">
+                    <p>Thank you for shopping with us!</p>
+                    <p>Please come again</p>
+                </div>
+            </div>
+            <button class="print-btn" onclick="window.print()">Print Receipt</button>
+        </div>
+    `;
+    
+    modal.innerHTML = modalContent;
+    
+    // Add click event to close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeReceiptModal();
+        }
+    });
+    
+    return modal;
+}
+
+function showReceipt(data) {
+    // Remove existing modal if it exists
+    let existingModal = document.getElementById('receiptModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // Create and append new modal
+    const modal = createReceiptModal();
+    document.body.appendChild(modal);
+
+    // Force the browser to recalculate styles
+    modal.offsetHeight;
+
+    // Get references to elements
+    const receiptDate = document.getElementById('receiptDate');
     const receiptItems = document.getElementById('receiptItems');
-    
-  
-    document.getElementById('receiptDate').textContent = new Date().toLocaleString();
-    
-   
-    receiptItems.innerHTML = '';
-    
-  
-    let html = '<table style="width: 100%;">';
-    for (let row of items) {
-        const name = row.cells[0].textContent;
-        const price = row.cells[1].textContent;
-        const quantity = row.querySelector('.quantity-input').value;
-        const total = row.cells[3].textContent;
-        
-        html += `
+    const receiptSubtotal = document.getElementById('receiptSubtotal');
+    const receiptTax = document.getElementById('receiptTax');
+    const receiptTotal = document.getElementById('receiptTotal');
+
+    // Set date
+    receiptDate.textContent = data.date.toLocaleString();
+
+    // Set items
+    receiptItems.innerHTML = `
+        <table style="width: 100%; margin-bottom: 10px;">
             <tr>
-                <td>${name}</td>
-                <td>${quantity}x</td>
-                <td style="text-align: right;">${total}</td>
+                <th style="text-align: left;">Item</th>
+                <th style="text-align: right;">Qty</th>
+                <th style="text-align: right;">Price</th>
+                <th style="text-align: right;">Total</th>
             </tr>
-        `;
-    }
-    html += '</table>';
-    receiptItems.innerHTML = html;
-   
-    document.getElementById('receiptSubtotal').textContent = 
-        document.getElementById('subtotal').textContent.replace('$', '');
-    document.getElementById('receiptTax').textContent = 
-        document.getElementById('tax').textContent.replace('$', '');
-    document.getElementById('receiptTotal').textContent = 
-        document.getElementById('grand-total').textContent.replace('$', '');
-    
-    modal.style.display = 'block';
-}
+            ${data.items.map(item => `
+                <tr>
+                    <td style="text-align: left;">${item.name}</td>
+                    <td style="text-align: right;">${item.quantity}</td>
+                    <td style="text-align: right;">$${item.price.toFixed(2)}</td>
+                    <td style="text-align: right;">$${item.total.toFixed(2)}</td>
+                </tr>
+            `).join('')}
+        </table>
+    `;
 
-function closeReceiptModal() {
-    document.getElementById('receiptModal').style.display = 'none';
-}
-
-
-document.getElementById('pay-btn').addEventListener('click', function() {
-    if (document.getElementById('checkout-items').children.length > 0) {
-        showReceiptModal();
+    // Set totals
+    receiptSubtotal.textContent = data.subtotal.toFixed(2);
+    receiptTax.textContent = data.tax.toFixed(2);
+    if (data.discount > 0) {
+        document.getElementById('receiptDiscount').textContent = data.discount.toFixed(2);
+        document.getElementById('discountRow').style.display = 'block';
     } else {
-        alert('No items in checkout');
+        document.getElementById('discountRow').style.display = 'none';
     }
-});
+    receiptTotal.textContent = data.total.toFixed(2);
+
+    // Show modal with a slight delay to ensure proper rendering
+    requestAnimationFrame(() => {
+        modal.style.display = 'flex';
+    });
+}
+
+// Update close function to use proper display style
+function closeReceiptModal() {
+    const modal = document.getElementById('receiptModal');
+    if (modal) {
+        modal.style.display = 'none';
+        setTimeout(() => modal.remove(), 300); // Remove after animation
+    }
+}
+
+// Make closeReceiptModal globally available
+window.closeReceiptModal = closeReceiptModal;
