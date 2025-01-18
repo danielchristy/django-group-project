@@ -132,7 +132,9 @@ def item_detail(request, item_id):
         elif request.method == "PUT":
             data = json.loads(request.body)
             item.cost = data.get('cost', item.cost)
+            item.department = data.get('department', item.department)
             item.amount = data.get('amount', item.amount)
+            item.barcode = data.get('barcode', item.barcode)
             item.save()
             return JsonResponse({'message': 'Item updated successfully'})
             
@@ -152,6 +154,11 @@ def item_detail(request, item_id):
 def create_item(request):
     try:
         data = json.loads(request.body)
+        barcode = data.get('barcode')
+        if Item.objects.filter(barcode=barcode).exists():
+            return JsonResponse({
+                'error': 'This barcode is already in use.'
+            }, status=400)
         item = Item.objects.create(
             name=data['name'],
             cost=data['cost'],

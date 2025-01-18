@@ -10,6 +10,7 @@ urlpatterns = [
     path('inventory/', views.show_all_items, name='inventory_page'),
     path('sales/', views.sales_func, name='sales'),
     path('role/', views.assign_role, name='role'),
+    path('accounts/login/', views.login_func, name='login'),
     
     
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
