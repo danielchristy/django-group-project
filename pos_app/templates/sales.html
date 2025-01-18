@@ -4,6 +4,7 @@
 {% block content %}
 <head>
     <link rel='stylesheet' href='{% static 'css/sales.css' %}'>
+    <link rel='stylesheet' href='{% static 'css/pin_modal.css' %}'>
 </head>
 
 <div class='sales-container'>
@@ -35,7 +36,7 @@
                     </tr>
                 </thead>
                 <tbody id='checkout-items'>
-                    <!-- Items will be added here dynamically -->
+                 
                 </tbody>
             </table>
         </div>
@@ -83,5 +84,6 @@
 <script src="{% static 'js/receipt.js' %}"></script>
 <script src="{% static 'js/sales.js' %}"></script>
 <script src="{% static 'js/search_handler.js' %}"></script>
+<script src="{% static 'js/discount_handler.js' %}"></script>
 
 {% endblock %}

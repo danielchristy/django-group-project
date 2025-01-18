@@ -3,16 +3,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     let subtotal = 0;
     let taxRate = 0.07;
-    let discount = 0;
+    window.discount = 0;  // Make discount globally accessible
 
-    // updating payment interacfe 
-    function updateTransaction() {
+    // Make updateTransaction globally available
+    window.updateTransaction = function() {
         let tax = subtotal * taxRate;
-        let grandTotal = subtotal + tax - discount;
+        let grandTotal = subtotal + tax - window.discount;
 
         document.getElementById('subtotal').innerText = `$${subtotal.toFixed(2)}`;
         document.getElementById('tax').innerText = `$${tax.toFixed(2)}`;
-        document.getElementById('discount').innerText = `$${discount.toFixed(2)}`;
+        document.getElementById('discount').innerText = `$${window.discount.toFixed(2)}`;
         document.getElementById('grand-total').innerText = `$${grandTotal.toFixed(2)}`;
     }
 
@@ -51,16 +51,17 @@ document.addEventListener('DOMContentLoaded', function () {
         'discount-manager': 1.00
     };
 
-    // Add event listeners for discount buttons that exist
-    Object.keys(discountButtons).forEach(buttonId => {
-        const button = document.getElementById(buttonId);
-        if (button) {
-            button.addEventListener('click', function() {
-                discount = subtotal * discountButtons[buttonId];
-                updateTransaction();
-            });
-        }
-    });
+    // Only add direct event listener for rewards member discount
+    const rewardsButton = document.getElementById('discount-rewards-member');
+    if (rewardsButton) {
+        rewardsButton.addEventListener('click', function() {
+            discount = subtotal * 0.10;  // 10% discount
+            updateTransaction();
+        });
+    }
+
+    // Remove any other discount button event listeners from sales.js
+    // The PIN-protected discounts will be handled by discount_handler.js
 
     // Make addItemToCheckout available globally
     window.addItemToCheckout = function(item) {
