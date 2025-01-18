@@ -83,13 +83,13 @@ def assign_role(request):
 
 def logout_func(request):
     logout(request)
-   
+    messages.success(request, "Logged out.")
     return redirect('login')
         
 def is_superuser(user):
     return user.is_superuser
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='sales')
 def show_all_items(request):
     items = Item.objects.all()
     return render(request, 'inventory.html', {'items': items})
