@@ -83,7 +83,7 @@ def assign_role(request):
 
 def logout_func(request):
     logout(request)
-    messages.success(request, "Logged out.")
+   
     return redirect('login')
         
 def is_superuser(user):
