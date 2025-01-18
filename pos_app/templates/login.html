@@ -34,5 +34,12 @@
         </div>
     {% else %}
         <p>You are already logged in.</p> 
+        <script>
+            window.onload = function() {
+                setTimeout(function() {
+                    window.location.href = "{% url 'inventory_page' %}";
+                }, 1500);
+            };
+        </script>
     {% endif %}
 {% endblock %}

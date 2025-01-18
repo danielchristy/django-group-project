@@ -42,29 +42,70 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // event listeners for applyign discounts
-    document.getElementById('discount-15').addEventListener('click', function () {
-        discount = subtotal * 0.15;
-        updateTransaction();
+    // event listeners for applying discounts
+    const discountButtons = {
+        'discount-single-item': 0.15,
+        'discount-rewards-member': 0.10,
+        'discount-employee': 0.15,
+        'discount-manager': 1.00
+    };
+
+    // Add event listeners for discount buttons that exist
+    Object.keys(discountButtons).forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.addEventListener('click', function() {
+                discount = subtotal * discountButtons[buttonId];
+                updateTransaction();
+            });
+        }
     });
 
-    document.getElementById('discount-rewards').addEventListener('click', function () {
-        discount = subtotal * 0.10;
-        updateTransaction();
-    });
+    // Make addItemToCheckout available globally
+    window.addItemToCheckout = function(item) {
+        const checkoutItems = document.getElementById('checkout-items');
+        
+        // Check if item already exists in checkout
+        const existingRow = Array.from(checkoutItems.getElementsByTagName('tr')).find(
+            row => row.dataset.itemId === item.id.toString()
+        );
 
-    document.getElementById('discount-employee').addEventListener('click', function () {
-        discount = subtotal * 0.15;
-        updateTransaction();
-    });
+        if (existingRow) {
+            // If item exists, increment quantity
+            const quantityInput = existingRow.querySelector('.item-quantity');
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updateSubtotal();
+            return;
+        }
 
-    document.getElementById('discount-manager').addEventListener('click', function () {
-        discount = subtotal * 1;
-        updateTransaction();
-    });
+        // Create new row for item
+        const row = document.createElement('tr');
+        row.dataset.itemId = item.id;
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>$${item.cost.toFixed(2)}</td>
+            <td>
+                <input type="number" class="item-quantity" value="1" min="1" style="width: 60px;">
+            </td>
+            <td class="item-total">$${item.cost.toFixed(2)}</td>
+            <td>
+                <button class="remove-item">Remove</button>
+            </td>
+        `;
 
-    // need to add barcode search logic
+        // Add event listeners for the new row
+        const quantityInput = row.querySelector('.item-quantity');
+        quantityInput.addEventListener('change', updateSubtotal);
 
+        const removeButton = row.querySelector('.remove-item');
+        removeButton.addEventListener('click', function() {
+            row.remove();
+            updateSubtotal();
+        });
+
+        checkoutItems.appendChild(row);
+        updateSubtotal();
+    };
 
     updateSubtotal();
 });
