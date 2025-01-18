@@ -1,23 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div style="color: green;">{{ message }}</div>
-        {% endfor %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+<script src='{% static 'js/base.js' %}'></script>
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class='screensaver'>
+            <div class='floating-circle circle-1'></div>
+            <div class='floating-circle circle-2'></div>
+            <div class='floating-circle circle-3'></div>
+            <div class='floating-circle circle-4'></div>
+
+            <div class='login-container'>
+                <h1 class='login-title'>Nimbus POS</h1>
+                <button id='theme-toggle' aria-label='Toggle Theme'>🌙</button>
+                <p class='nimbus-quote'>Join The Nimbus Family</p>
+                
+                <form class='login-form' method='POST'>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-field">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="error-message">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type='submit'>Register</button>
+                </form>
+                
+                <p>Already have an account?</p>
+                <form action="{% url 'login' %}" method="get">
+                    <button id='login-redirect-btn' aria-label='Login'>Login</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <p>You are already logged in.</p>
+        <script>
+            window.onload = function() {
+                setTimeout(function() {
+                    window.location.href = "{% url 'inventory_page' %}";
+                }, 1500);
+            };
+        </script>
     {% endif %}
-    
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    
-    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
-</body>
-</html> 
+{% endblock %} 

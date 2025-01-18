@@ -54,16 +54,16 @@ def register_func(request):
             if name == "admin" and password == "adminaccess":
                 if not User.objects.filter(username="admin").exists():
                     User.objects.create_superuser(username="admin", password="adminaccess")
-                    messages.success(request, "Superuser created.")
+                    messages.success(request, "Admin account created successfully! Please log in.")
                     return redirect('login')
                 else:
-                    messages.info(request, "User already exists.")
+                    messages.info(request, "Admin user already exists.")
                     return redirect('login')
             else:
                 form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('login')
+                username = form.cleaned_data.get('username')
+                messages.success(request, f'Account created successfully for {username}! Please log in.')
+                return redirect('login')
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
@@ -83,7 +83,7 @@ def assign_role(request):
 
 def logout_func(request):
     logout(request)
-    messages.success(request, "Logging out.")
+    messages.success(request, "Logged out.")
     return redirect('login')
         
 def is_superuser(user):
@@ -182,17 +182,10 @@ def create_item(request):
 ##testing stuff for the search feature on the main pos screene
 @csrf_exempt
 def search_item(request):
-    print("Search view called")  # Debug log
-    print("Request method:", request.method)  # Debug log
-    print("Request GET params:", request.GET)  # Debug log
-    
     barcode = request.GET.get('barcode')
-    print(f"Searching for barcode: {barcode}")  # Debug log
-    
     try:
         item = Item.objects.get(barcode=barcode)
-        print(f"Found item: {item.name}")  # Debug log
-        
+       
         response_data = {
             'id': item.id,
             'name': item.name,
@@ -201,14 +194,14 @@ def search_item(request):
             'amount': item.amount,
             'barcode': item.barcode
         }
-        print("Sending response:", response_data)  # Debug log
+      
         return JsonResponse(response_data)
         
     except Item.DoesNotExist:
-        print(f"No item found with barcode: {barcode}")  # Debug log
+       
         return JsonResponse({'error': 'Item not found'}, status=404)
     except Exception as e:
-        print(f"Error: {str(e)}")  # Debug log
+        
         return JsonResponse({'error': str(e)}, status=400)
         
 #this is for the pin to swtich user i have it currently mapped to the hyperinlin on top that aays 

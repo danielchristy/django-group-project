@@ -20,6 +20,15 @@
                 <h1 class='login-title'>Nimbus POS</h1>
                 <button id='theme-toggle' aria-label='Toggle Theme'>🌙</button>
                 <p class='nimbus-quote'>Where Every Sale Is A Breeze</p>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
                 <form class='login-form' method='POST'>
                     {% csrf_token %}
                     {{ form.as_p }} 

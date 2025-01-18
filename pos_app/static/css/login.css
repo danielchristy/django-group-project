@@ -1,19 +1,213 @@
-/* login styling */
-.login-container {
-    padding: 25px;
-    margin: 0 auto;
-    height: 45%;
-    width: 50%;
-    background-color: #95a5a6;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #2c3e50;
+    --text-color: #333;
+    --background-color: #f5f6fa;
+    --input-background: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
-.loginform {
-    padding: 3rem;
+[data-theme="dark"] {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --text-color: #ecf0f1;
+    --background-color: #2c3e50;
+    --input-background: #34495e;
+    --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
-.login-info-container {
+.screensaver {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
     display: flex;
     justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float 15s infinite ease-in-out;
+}
+
+.circle-1 {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-color);
+    animation-delay: 0s;
+}
+
+.circle-2 {
+    width: 150px;
+    height: 150px;
+    background-color: var(--secondary-color);
+    animation-delay: -5s;
+}
+
+.circle-3 {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary-color);
+    animation-delay: -10s;
+}
+
+.circle-4 {
+    width: 120px;
+    height: 120px;
+    background-color: var(--secondary-color);
+    animation-delay: -15s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(100px, 100px);
+    }
+    50% {
+        transform: translate(0, 200px);
+    }
+    75% {
+        transform: translate(-100px, 100px);
+    }
+}
+
+.login-container {
+    background-color: var(--input-background);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px var(--shadow-color);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    min-width: 320px;
+}
+
+.login-title {
+    color: var(--text-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.nimbus-quote {
+    color: var(--text-color);
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.login-form input {
+    padding: 0.8rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: var(--input-background);
+    color: var(--text-color);
+}
+
+.login-form button,
+#register-redirect-btn,
+#login-redirect-btn {
+    padding: 0.8rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-form button:hover,
+#register-redirect-btn:hover,
+#login-redirect-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+#theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.message {
+    color: var(--primary-color);
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: var(--background-color);
+}
+
+/* Django form styling */
+.login-form p {
+    margin: 0;
+    color: var(--text-color);
+}
+
+.login-form ul.errorlist {
+    color: #e74c3c;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.login-form label {
+    color: var(--text-color);
+    margin-bottom: 0.3rem;
+    display: block;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.form-field {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: var(--input-background);
+    color: var(--text-color);
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    text-align: left;
+}
+
+.error-message ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Hide the default Django help text */
+.helptext {
+    display: none;
 }
