@@ -1,33 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <!--they can only access this page if they are a staff member or superuser -->
-    <title>Admin Dashboard</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'sales' %}">Sales</a>
-        <a href="{% url 'logout' %}">Logout</a>
+{% extends 'base.html' %}
+{% load static %}
 
-    </nav>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% endblock %}
 
-    <h1>Admin Dashboard</h1>
+{% block content %}
+    <body>
     
-    <div class="dashboard-stats">
-        <h2>Store Overview</h2>
-        <p>Welcome, {{ user.username }}!</p>
+        <div class="admin-dashboard-container">
         
-      
-        
-        
-        <div class="admin-links">
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="{% url 'admin:index' %}">Django Admin Interface</a></li>
-                <li><a href="{% url 'sales' %}">View Store</a></li>
-            </ul>
-        </div>
-    </div>
+            <div class="dashboard-content">
+                <div class="card">
+                    <h2>Stores</h2>
+                    <p><a href="{% url 'sales' %}">View Store</a></p>
+                </div>
 
-</body>
-</html> 
+            </div>
+        </div>
+
+    </body>
+{% endblock %}

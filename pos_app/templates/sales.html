@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/sales.css' %}">
+{% endblock %}
+
 {% block content %}
 <head>
     <link rel='stylesheet' href='{% static 'css/sales.css' %}'>
@@ -15,7 +19,7 @@
             <button id='search-btn'>Search</button>
         </div>
 
-       
+    
 
         <div class='checkout-list'>
             <h3>Checkout</h3>
@@ -30,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody id='checkout-items'>
-                 
+                
                 </tbody>
             </table>
         </div>
@@ -60,12 +64,12 @@
         <div class='payment-options'>
             <div class='payment-btn-container'>
                 <button id='pay-btn' class='pay-btn'>Pay</button>
-              
-             
-               
+            
+            
+            
                 <button class='discount-btn' id='discount-rewards-member'>Rewards Member Discount (10%)</button>
-              
-              
+            
+            
                 <button class='discount-btn' id='discount-manager'>Manager Discount</button>
             </div>
         </div>

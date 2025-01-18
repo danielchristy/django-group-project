@@ -1,24 +1,32 @@
 /* sales styling */
+html,body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
 .sales-container {
     display: flex;
     justify-content: center;
-    width: 90%;
+    height: 100%;
+    width: 100%;
     gap: 80px;
     padding: 25px;
-    background-color: var(--background);
+    background-color: var(--container-background);    
+    border: 2px solid var(--border-color);
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* interfaces */
 .checkout-interface, .payment_interface {
+    background-color: var(--highlight-blue);
+    border: 2px solid var(--border-color);
     width: 45%;
     padding: 20px;
     box-sizing: border-box;
     border-radius: 5px;
-}
-
-.checkout-interface {
-    background-color: var(--highlight-light);
-    border: 2px solid var(--highlight-blue);
 }
 
 .checkout-list-table {
@@ -27,14 +35,9 @@
     margin-top: 15px;
 }
 
-.payment_interface {
-    background-color: var(--highlight-orange);
-    border: 2px solid var(--highlight-blue);
-}
-
 .transaction-info {
-    background-color: var(--highlight-dark);
-    color: var(--highlight-yellow);
+    background-color: lightblue;
+    color: var(--text-primary);
     padding: 12px;
     border-radius: 5px;
     font-size: 16px;
@@ -54,7 +57,7 @@
 
 #grand-total-label, #grand-total {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: bolder;
 }
 
 .payment-options {
@@ -70,24 +73,39 @@
 button {
     margin: 5px 0;
     padding: 10px;
-    background-color: var(--button-background);
-    color: var(--button-text);
+    background-color: var(--accent-teal);
+    color: var(--text-primary);
     border: 1px;
     border-radius: 5px;
     font-size: 16px;
 }
 
+button:hover {
+    background-color: var(--accent-lavender);
+    transform: scale(1.05);
+}
+
 #pay-btn {
     background-color: green;
-    color: var(--button-text);
+    color: var(--text-primary);
     font-size: 28px;
     width: 100%;
     padding: 10px;
 }
 
 .discount-btn {
-    background-color: dimgray;
-    color: var(--button-text);
+    background-color: #B0BEC5;
+    color: var(--text-primary);
+}
+
+#searchInput {
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #B0BEC5; 
+    color: #333;
 }
 
 .modal {
