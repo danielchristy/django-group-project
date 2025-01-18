@@ -27,7 +27,11 @@
                     <input type='password' name='password' placeholder='Password' required>
                     <button type='submit'>Login</button>
                 </form>
-
+                
+                <p>Don't have an account?</p>
+                <form action="{% url 'register' %}" method="get">
+                    <button id='register-redirect-btn' aria-label='Register'>Register</button>
+                </form>
             </div>
         </div>
     {% else %}
