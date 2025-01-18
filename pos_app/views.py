@@ -33,10 +33,9 @@ def login_func(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # print(user.role)
             print(user.is_superuser)
             if user.is_superuser:
-                return redirect('role')
+                return redirect('admin_dashboard')
             else:
                 return redirect("inventory_page")
         else:
