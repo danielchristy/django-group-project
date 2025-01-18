@@ -1,4 +1,30 @@
-// Search and checkout functionality
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Receipt.js loaded');
+    
+    const searchBtn = document.getElementById('search-btn');
+    const barcodeInput = document.getElementById('barcode');
+    
+    if (searchBtn) {
+        console.log('Search button found');
+        searchBtn.addEventListener('click', searchItem);
+    } else {
+        console.error('Search button not found');
+    }
+    
+    if (barcodeInput) {
+        console.log('Barcode input found');
+        barcodeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchItem();
+            }
+        });
+    } else {
+        console.error('Barcode input not found');
+    }
+});
+
+
 document.getElementById('search-btn').addEventListener('click', searchItem);
 document.getElementById('barcode').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
@@ -8,35 +34,39 @@ document.getElementById('barcode').addEventListener('keypress', function(e) {
 
 function searchItem() {
     const barcode = document.getElementById('barcode').value;
+    console.log('Searching for barcode:', barcode);
     
     fetch(`/api/item/search/?barcode=${barcode}`)
-        .then(response => response.json())
-        .then(item => {
-            if (item) {
-                addItemToCheckout(item);
-                document.getElementById('barcode').value = ''; // Clear input
-            } else {
+        .then(response => {
+            console.log('Search response:', response);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Search data:', data);
+            if (data.error) {
                 alert('Item not found');
+            } else {
+                addItemToCheckout(data);
+                document.getElementById('barcode').value = '';
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Search error:', error);
             alert('Error searching for item');
         });
 }
 
 function addItemToCheckout(item) {
     const tbody = document.getElementById('checkout-items');
-    
-    // Check if item already exists in checkout
+  
     const existingRow = tbody.querySelector(`tr[data-item-id="${item.id}"]`);
     if (existingRow) {
-        // Increment quantity if item exists
+       
         const quantityInput = existingRow.querySelector('.quantity-input');
         quantityInput.value = parseInt(quantityInput.value) + 1;
         updateRowTotal(existingRow);
     } else {
-        // Add new row if item doesn't exist
+       
         const row = document.createElement('tr');
         row.setAttribute('data-item-id', item.id);
         
@@ -86,16 +116,15 @@ function updateTotals() {
     document.getElementById('grand-total').textContent = `$${total.toFixed(2)}`;
 }
 
-// Receipt functionality
+
 function showReceipt() {
     const modal = document.getElementById('receiptModal');
     const receiptItems = document.getElementById('receipt-items');
     const datetime = new Date().toLocaleString();
-    
-    // Clear previous items
+   
     receiptItems.innerHTML = '';
     
-    // Add items from checkout
+    /
     document.querySelectorAll('#checkout-items tr').forEach(row => {
         const name = row.cells[0].textContent;
         const price = row.cells[1].textContent;
@@ -112,31 +141,31 @@ function showReceipt() {
         receiptItems.appendChild(receiptRow);
     });
     
-    // Update totals
+
     document.getElementById('receipt-subtotal').textContent = document.getElementById('subtotal').textContent;
     document.getElementById('receipt-tax').textContent = document.getElementById('tax').textContent;
     document.getElementById('receipt-total').textContent = document.getElementById('grand-total').textContent;
     
-    // Set datetime
+
     document.querySelector('.receipt-datetime').textContent = datetime;
     
     modal.style.display = 'block';
 }
 
 function closeReceiptModal() {
-    // Close the modal
+ 
     document.getElementById('receiptModal').style.display = 'none';
     
-    // Clear the checkout list
+   
     document.getElementById('checkout-items').innerHTML = '';
     
-    // Reset all totals to $0.00
+   
     document.getElementById('subtotal').textContent = '$0.00';
     document.getElementById('tax').textContent = '$0.00';
     document.getElementById('grand-total').textContent = '$0.00';
     document.getElementById('discount').textContent = '$0.00';
     
-    // Clear the barcode input
+   
     document.getElementById('barcode').value = '';
 }
 
@@ -144,16 +173,68 @@ function printReceipt() {
     window.print();
 }
 
-// Add event listener when document is loaded
+
 document.addEventListener('DOMContentLoaded', function() {
     const payBtn = document.getElementById('pay-btn');
     if (payBtn) {
         payBtn.addEventListener('click', showReceipt);
     }
 
-    // Add close button listener
     const closeBtn = document.querySelector('.close');
     if (closeBtn) {
         closeBtn.addEventListener('click', closeReceiptModal);
+    }
+});
+
+function showReceiptModal() {
+    const modal = document.getElementById('receiptModal');
+    const items = document.getElementById('checkout-items').getElementsByTagName('tr');
+    const receiptItems = document.getElementById('receiptItems');
+    
+  
+    document.getElementById('receiptDate').textContent = new Date().toLocaleString();
+    
+   
+    receiptItems.innerHTML = '';
+    
+  
+    let html = '<table style="width: 100%;">';
+    for (let row of items) {
+        const name = row.cells[0].textContent;
+        const price = row.cells[1].textContent;
+        const quantity = row.querySelector('.quantity-input').value;
+        const total = row.cells[3].textContent;
+        
+        html += `
+            <tr>
+                <td>${name}</td>
+                <td>${quantity}x</td>
+                <td style="text-align: right;">${total}</td>
+            </tr>
+        `;
+    }
+    html += '</table>';
+    receiptItems.innerHTML = html;
+   
+    document.getElementById('receiptSubtotal').textContent = 
+        document.getElementById('subtotal').textContent.replace('$', '');
+    document.getElementById('receiptTax').textContent = 
+        document.getElementById('tax').textContent.replace('$', '');
+    document.getElementById('receiptTotal').textContent = 
+        document.getElementById('grand-total').textContent.replace('$', '');
+    
+    modal.style.display = 'block';
+}
+
+function closeReceiptModal() {
+    document.getElementById('receiptModal').style.display = 'none';
+}
+
+
+document.getElementById('pay-btn').addEventListener('click', function() {
+    if (document.getElementById('checkout-items').children.length > 0) {
+        showReceiptModal();
+    } else {
+        alert('No items in checkout');
     }
 });

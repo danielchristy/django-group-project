@@ -181,10 +181,14 @@ def search_item(request):
             'id': item.id,
             'name': item.name,
             'cost': float(item.cost),
+            'department': item.department,
+            'amount': item.amount,
             'barcode': item.barcode
         })
     except Item.DoesNotExist:
-        return JsonResponse(None, safe=False)
+        return JsonResponse({'error': 'Item not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
         
 #this is for the pin to swtich user i have it currently mapped to the hyperinlin on top that aays 
 #switch user once you figure out wher eyou want it you can used this fucntion and the assing role.thml
@@ -203,6 +207,3 @@ def change_user(request):
 @login_required
 def home_page(request):
     return render(request, 'home.html')
-        
-def popup_test(request):
-    return render(request, 'popup_test.html')
