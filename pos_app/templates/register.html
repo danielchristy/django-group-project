@@ -1,23 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
-    
-    {% if messages %}
-        {% for message in messages %}
-            <div style="color: green;">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-    
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    
-    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
-</body>
-</html> 
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+<script src='{% static 'js/base.js' %}'></script>
+
+{% block content %}
+    <div class='screensaver'>
+        <div class='floating-circle circle-1'></div>
+        <div class='floating-circle circle-2'></div>
+        <div class='floating-circle circle-3'></div>
+        <div class='floating-circle circle-4'></div>
+
+    <div class="login-container">
+        <h1 class='login-title'>Nimbus POS</h1>
+        <button id='theme-toggle' aria-label='Toggle Theme'>🌙</button>
+        <p class='nimbus-quote'>Start Gliding towards an Easy-Breezy Sales and Payments Experience Today</p>
+        <form method="POST" class="login-form" id="register-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p>Already have an account?</p>
+        <button id='login-redirect-btn' aria-label='Login'>Login</button>
+    </div>
+{% endblock %}
