@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
         subtotal = 0;
         let items = document.querySelectorAll('#checkout-items tr');
         items.forEach(function (row) {
-            let price = parseFloat(row.querySelector('td:nth-child(4)').innerText.replace('$', ''));
+            // this is where the bad econmy butg was 
+            let price = parseFloat(row.querySelector('td:nth-child(2)').innerText.replace('$', ''));
             let quantity = parseInt(row.querySelector('.item-quantity').value, 10);
             let total = price * quantity;
             row.querySelector('.item-total').innerText = `$${total.toFixed(2)}`;
