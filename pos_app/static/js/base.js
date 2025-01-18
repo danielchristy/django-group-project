@@ -21,10 +21,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // local storage prevents theme from reseting on page refresh
-
-// .btn {
-//     padding: .5rem;
-//     border-radius: 5px;
-//     outline:none; 
-//     border: none;
-// }

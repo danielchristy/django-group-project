@@ -3,11 +3,11 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
-{% endblock %}
-
-<script src='{% static 'js/base.js' %}'></script>
+{% endblock extra_css %}
 
 {% block content %}
+    <script src='{% static "js/base.js" %}'></script>
+    
     {% if not user.is_authenticated %}
         <div class='screensaver'>
             <div class='floating-circle circle-1'></div>
@@ -52,4 +52,4 @@
             };
         </script>
     {% endif %}
-{% endblock %} 
+{% endblock content %}

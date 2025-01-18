@@ -34,25 +34,27 @@
         </header>
     {% endif %}
 
-    <script type="text/javascript">
+    <script>
+        let inactivityTime = 2 * 60 * 1000; 
         let timeout;
-        const logoutTime = 120000; 
+
+        function resetTimer() {
+            clearTimeout(timeout);
+            timeout = setTimeout(logout, inactivityTime);
+        }
 
         function logout() {
-            window.location.href = "{% url 'logout' %}";
+            window.location.href = "{% url 'logout' %}"; 
         }
 
-        function resetTimeout() {
-            clearTimeout(timeout);
-            timeout = setTimeout(logout, logoutTime);
-        }
+        document.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+        document.ontouchstart = resetTimer; 
 
-        document.addEventListener("mousemove", resetTimeout);
-        document.addEventListener("keydown", resetTimeout);
-        document.addEventListener("scroll", resetTimeout);
-
-        resetTimeout();
+        window.onload = resetTimer;
     </script>
+    
     
     {% block content %}{% endblock %}
     
