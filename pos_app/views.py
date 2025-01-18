@@ -36,7 +36,7 @@ def login_func(request):
             login(request, user)
             print(user.is_superuser)
             if user.is_superuser:
-                return redirect('admin_dashboard')
+                return redirect('sales')
             else:
                 return redirect("inventory_page")
         else:
