@@ -1,14 +1,14 @@
-// theme toggle between light and dark mode
+// the toggle on top right for changeing them 
 document.addEventListener('DOMContentLoaded', function () {
     const root = document.documentElement;
     const themeToggle = document.getElementById('theme-toggle');
 
-    // Ensure theme defaults to light if not set
+    //this is the main defaul
     let currentTheme = localStorage.getItem('theme') || 'light';
     root.setAttribute('data-theme', currentTheme);
 
     if (themeToggle) {
-        // Update toggle button icon
+        // for udating the tiny icon depeinding on theme
         themeToggle.textContent = currentTheme === 'light' ? '🌙' : '🌞';
 
         themeToggle.addEventListener('click', function () {
@@ -19,5 +19,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
-// local storage prevents theme from reseting on page refresh
