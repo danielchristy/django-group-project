@@ -20,11 +20,12 @@
                 <h1>Nimbus POS</h1>
                 <nav class='nav-links'>
                     <ul>
-                        <li><a href='{% url 'inventory_page' %}'>Inventory</a></li>
+                        {% if user.is_superuser %}
+                            <li><a href='{% url 'inventory_page' %}'>Inventory</a></li>
+                        {% endif %}
                         <li><a href='{% url 'sales' %}'>Sales</a></li>
                         {% if user.is_staff %}
-                            <li><a href='{% url 'admin_dashboard' %}'>Admin Dashboard</a></li>
-                            <li><a href='{% url 'admin:index' %}'>Django Admin</a></li>
+                            
                         {% endif %}
                         <li><a href='{% url 'logout' %}'>Logout</a></li>
                     </ul>

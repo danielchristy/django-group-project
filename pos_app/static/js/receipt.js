@@ -203,6 +203,15 @@ function closeReceiptModal() {
     if (modal) {
         modal.style.display = 'none';
         setTimeout(() => modal.remove(), 300); // Remove after animation
+        
+        // Clear all totals
+        document.getElementById('subtotal').textContent = '$0.00';
+        document.getElementById('tax').textContent = '$0.00';
+        document.getElementById('discount').textContent = '$0.00';
+        document.getElementById('grand-total').textContent = '$0.00';
+        
+        // Clear checkout items
+        document.getElementById('checkout-items').innerHTML = '';
     }
 }
 
